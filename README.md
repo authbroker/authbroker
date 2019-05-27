@@ -17,7 +17,7 @@ Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJ
 ### How Using it
 This module can be used with different brokers like [Mosca](https://github.com/mcollina/mosca), [Aedes](https://github.com/mcollina/aedes), [Ponte](http://github.com/eclipse/ponte).
 
-```
+``` js
 
 'use strict'
 
@@ -90,7 +90,7 @@ function setup() {
 
 The authentication performs with Mongodb server directly. You can change and customize Mongodb server settings with environemt variables. Data structure in Mongodb is like these;
 
-```
+``` javascript
 
   {
     realm: 'hello',
