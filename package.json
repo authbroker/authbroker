@@ -8,7 +8,15 @@
     "url": "https://github.com/authbroker/authbroker"
   },
   "keywords": [
-    "mosca", "aedes", "authentication", "authorization", "mqtt", "http", "coap"
+    "mosca",
+    "aedes",
+    "ponte",
+    "authentication",
+    "authorization",
+    "mqtt",
+    "http",
+    "coap",
+    "credintial"
   ],
   "author": "Hadi Mahdavi",
   "email": "kamerdack@gmail.com",
@@ -17,10 +25,12 @@
     "url": "https://github.com/authbroker/authbroker/issues"
   },
   "dependencies": {
-    "mongodb": "3.2.6"
+    "mongodb": "3.2.6",
+    "debug": "4.1.1"
   },
   "devDependencies": {
-    "chai": "*",
-    "mocha": "*"
+    "chai": "4.2.0",
+    "mocha": "6.1.4",
+    "ponte": "0.0.16"
   }
 }
