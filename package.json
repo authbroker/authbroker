@@ -1,0 +1,26 @@
+{
+  "name": "authbroker",
+  "version": "0.1.0",
+  "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/authbroker/authbroker"
+  },
+  "keywords": [
+    "mosca", "aedes", "authentication", "authorization", "mqtt", "http", "coap"
+  ],
+  "author": "Hadi Mahdavi",
+  "email": "kamerdack@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/authbroker/authbroker/issues"
+  },
+  "dependencies": {
+    "mongodb": "3.2.6"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*"
+  }
+}
