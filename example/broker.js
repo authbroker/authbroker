@@ -1,12 +1,13 @@
 'use strict'
 
 var ponte = require('ponte')
-var AuthBroker = ('../lib/index')
+var AuthBroker = require('../lib/index')
 
 var envAuth = {
   db: {
-    url: 'mongodb://localhost:27017/',
-    name: 'paraffin'
+    type: 'mongo',
+    url: 'mongodb://localhost:27017/paraffin',
+    option: {}
   },
   salt: {
     salt: 'salt', //salt by pbkdf2 method
@@ -35,23 +36,23 @@ var auth = new AuthBroker(envAuth)
 
 var ponteSettings = {
   logger: {
-    level: config('LOG_LEVEL'),
-    name: config('APP_NAME')
+    level: 'info',
+    name: 'ParaffinIoT'
   },
   http: {
-    port: config('HTTP_PORT'),
+    port: 3000,
     authenticate: auth.authenticateHTTP(),
     authorizeGet: auth.authorizeGetHTTP(),
     authorizePut: auth.authorizePutHTTP()
   },
   mqtt: {
-    port: config('MQTT_PORT'), // tcp
+    port: 1883, // tcp
     authenticate: auth.authenticateMQTT(),
     authorizePublish: auth.authorizePublishMQTT(),
     authorizeSubscribe: auth.authorizeSubscribeMQTT()
   },
   coap: {
-    port: config('COAP_PORT'), // udp
+    port: 2345, // udp
     authenticate: auth.authenticateHTTP(),
     authorizeGet: auth.authorizeGetHTTP(),
     authorizePut: auth.authorizePutHTTP()
@@ -59,12 +60,12 @@ var ponteSettings = {
   persistence: {
     // same as http://mcollina.github.io/mosca/docs/lib/persistence/mongo.js.html
     type: 'mongo',
-    url: config('DB_PONTE_NAME')
+    url: 'mongodb://localhost:27017/ponte'
   },
   broker: {
     // same as https://github.com/mcollina/ascoltatori#mongodb
     type: 'mongo',
-    url: config('DB_PONTE_NAME')
+    url: 'mongodb://localhost:27017/ponte'
   }
 }
 

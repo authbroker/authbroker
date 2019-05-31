@@ -1,17 +1,27 @@
-# Authentication Module for NodeJS based Brokers
+# Authentication and Authorization Module for Brokers
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Build Status](https://travis-ci.org/authbroker/authbroker.svg)](https://travis-ci.com/authbroker/authbroker) [![Greenkeeper badge](https://badges.greenkeeper.io/authbroker/authbroker.svg)](https://greenkeeper.io/)
 
 Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.
 
 
-## Installation
-* Install mongo locally using [how to install mongodb](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04) and [Mongo docs](https://docs.mongodb.com/manual/administration/install-community/)
-* Run `mongo` to connect to your database, just to make sure it's working.
-* Clone this repo. `git clone https://github.com/authbroker/authbroker`
-* Change directory. `cd authbroker`
-* `npm install`
-* If you running in Development mode, for using a Demo DB you can run 'node ./lib/insertDemoDB.js'
+##  Getting Started
+
+* Install mongo locally using [how to install mongodb](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04) and [Mongo docs](https://docs.mongodb.com/manual/administration/install-community/). Make sure it's working.
+* If you want to run a test locally, clone this repo.
+
+``` bash
+git clone https://github.com/authbroker/authbroker
+cd authbroker
+npm install
+npm test
+```
+
+* If you are running in Development mode, for using a Demo DB you can run
+``` bash
+node ./lib/insertDemoDB.js
+```
+It fill DB with demo clients and users. 
 
 
 ### How Using it
@@ -22,7 +32,7 @@ This module can be used with different brokers like [Mosca](https://github.com/m
 'use strict'
 
 var ponte = require('ponte')
-var AuthBroker = ('./lib/index')  // visit 
+var authBroker = ('authbroker')  // visit 
 
 var envAuth = {
   db: {
@@ -30,7 +40,7 @@ var envAuth = {
   }
 }
 
-var auth = new AuthBroker(envAuth)
+var auth = new authBroker(envAuth)
 
 var ponteSettings = {
   http: {
@@ -82,7 +92,7 @@ server.on('ready', setup)
 
 // fired when the server is ready
 function setup() {
-  console.log('Brokero is up and running')
+  console.log('Broker is up and running')
 }
 
 ```
@@ -123,14 +133,26 @@ The authentication performs with Mongodb server directly. You can change and cus
 ```
 
 
-
-
 ## Contributing
+
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 Anyone with interest in or experience with the following technologies are encouraged to join the project.
 And if you fancy it, join the [Telegram group](t.me/joinchat/AuKmG05CNFTz0bsBny9igg) here for Devs and say Hello!
 
 
-## Authors
-[Hadi Mahdavi](https://twitter.com/kamerdack)
+## Authors / Contributors
+
+* [Hadi Mahdavi](https://twitter.com/kamerdack)
+
+
+
+## Credits / Inspiration
+
+* Matteo Collina for Mosca (https://github.com/mcollina/mosca)
+* Eugenio Pace for Auth0 Mosca inspiration (https://github.com/eugeniop/auth0mosca)
+
+
+## Copyright
+
+MIT - Copyright (c) 2019 Hadi Mahdavi
