@@ -149,10 +149,10 @@ And if you fancy it, join the [Telegram group](t.me/joinchat/AuKmG05CNFTz0bsBny9
 
 ## Credits / Inspiration
 
-* Matteo Collina for Mosca (https://github.com/mcollina/mosca)
+* Matteo Collina for Mosca, Aedes, Ponte (https://github.com/mcollina/mosca)
 * Eugenio Pace for Auth0 Mosca inspiration (https://github.com/eugeniop/auth0mosca)
 
 
 ## Copyright
 
-MIT - Copyright (c) 2019 Hadi Mahdavi
+MIT - Copyright (c) 2019 ioKloud
