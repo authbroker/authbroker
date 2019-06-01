@@ -21,14 +21,16 @@ var envAuth = {
     // individual password, so larger is better. however, larger also means longer
     // to hash the password. tune so that hashing the password takes about a
     // second
-    iterations: 872791
+    iterations: 10
   },
-  mqtt: {
-    limitW: 50,
-    limitMPM: 10
-  },
-  http: {},
-  coap: {}
+  adapters: {
+    mqtt: {
+      limitW: 50,
+      limitMPM: 10
+    },
+    http: {},
+    coap: {}
+  }
 }
 
 
