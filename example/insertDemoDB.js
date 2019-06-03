@@ -5,7 +5,8 @@ var debug = require('debug')
 // create a client to mongodb
 const MongoClient = require('mongodb').MongoClient
 const crypto = require('crypto')
-
+const methodology = 'vertical'
+var collectionName = 'authBroker'
 
 var yesterday = new Date()
 var today = new Date()
@@ -49,6 +50,7 @@ var docs = [
   {
     ver: '1.0',
     realm: 'ali',
+    clientName: 'Hall Temperature',
     clientId: 'Reader-114',
     adapters: [
       {
@@ -57,17 +59,17 @@ var docs = [
         secret: { type: 'basic', pwdhash: 'king', startAfter: yesterday, expiredBefore: nextMonth },
         topics: [
           { topic: 'temperature', action: 'allow', type: 'rw' },
-          { topic: 'color', action: 'deny'},
+          { topic: 'color', action: 'deny' },
           //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
         ],
         setting: {
           action: 'exactSame',  // Exactsame, 
           keepAlive: 20,
           cleanSession: true,
-          willTopic: '',
+          willTopic: 'ali/Reader-114/status',
           willQoS: 1,
           willRetain: false,
-          willPayload: '',
+          willPayload: 'offline',
           connectTimeout: 10000,  //ms
           reconnectPeriod: 3000,  //ms
           limitW: 50,  //50kb is allowable for writting packet data in every publish
@@ -77,7 +79,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'mohammad',
+    clientName: 'Garden Humidity',
     clientId: 'r92',
     adapters: [
       {
@@ -102,7 +106,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'mahdi',
+    clientName: 'Hall Temperature',
     clientId: 'm313',
     adapters: [
       {
@@ -127,7 +133,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'ali',
+    clientName: 'Hall Temperature',
     clientId: 'a110',
     adapters: [
       {
@@ -152,7 +160,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'ali',
+    clientName: 'Hall Temperature',
     clientId: 'Thermostat1398',
     adapters: [
       {
@@ -177,7 +187,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'username',
+    clientName: 'Hall Temperature',
     clientId: 'u911',
     adapters: [
       {
@@ -202,7 +214,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'username',
+    clientName: 'Hall Temperature',
     clientId: 'u20_Expired',
     adapters: [
       {
@@ -227,6 +241,7 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'hello',
     clientId: 'hi313',
     adapters: [
@@ -254,7 +269,9 @@ var docs = [
     ]
   },
   {
+    ver: '1.0',
     realm: 'hello',
+    clientName: 'Hall Temperature',
     clientId: 'hi110',
     adapters: [
       {
@@ -303,10 +320,11 @@ MongoClient.connect(
 
     for (i = 0; i < docs.length; i++) {
       // insert multiple documents to 'users' collection using insertOne
-      dbo.collection(docs[i].realm.toString()).insertOne(docs[i], function (err, res) {
+      if (methodology === 'horzintal')
+        collectionName = docs[i].realm
+        console.log('client ID: ' + docs[i].clientId.toString() + ' was inserted in db.')
+      dbo.collection(collectionName).insertOne(docs[i], function (err, res) {
         if (err) throw err
-        console.log('new Doc inserted')
-        console.log(res.result)
       })
     }
     // close the connection to db when you are done with it
