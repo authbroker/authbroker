@@ -88,7 +88,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'temperature', action: 'allow', type: 'rw' },
+          { topic: 'ali', action: 'allow', type: 'rw' },
+          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -97,7 +101,11 @@ var docs = [
         type: 'http',
         enabled: true,
         secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'temperature', action: 'allow', type: 'rw' },
+          { topic: 'ali', action: 'allow', type: 'rw' },
+          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
+        ]
       },
       {
         type: 'coap',
