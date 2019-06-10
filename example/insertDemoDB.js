@@ -58,6 +58,7 @@ var docs = [
         enabled: true,
         secret: { type: 'basic', pwdhash: 'king', startAfter: yesterday, expiredBefore: nextMonth },
         topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
           { topic: 'temperature', action: 'allow', type: 'rw' },
           { topic: 'color', action: 'deny' },
           //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
@@ -91,6 +92,7 @@ var docs = [
         topics: [
           { topic: 'temperature', action: 'allow', type: 'rw' },
           { topic: 'ali', action: 'allow', type: 'rw' },
+          { topic: 'ali/hello', action: 'allow', type: 'rw' }
           //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
         ],
         keepAlive: 20,
@@ -104,6 +106,7 @@ var docs = [
         topics: [
           { topic: 'temperature', action: 'allow', type: 'rw' },
           { topic: 'ali', action: 'allow', type: 'rw' },
+          { topic: 'ali/hello', action: 'allow', type: 'rw' }
           //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
         ]
       },

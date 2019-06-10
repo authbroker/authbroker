@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
   "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --recursive --bail --reporter spec tests",
+    "ci": "mocha --recursive --bail --watch tests",
+    "standard-lib": "standard lib/*.js --fix",
+    "standard-test": "standard tests/*.js --fix",
+    "start": "node ./example/broker"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/authbroker/authbroker"
@@ -25,9 +32,10 @@
     "url": "https://github.com/authbroker/authbroker/issues"
   },
   "dependencies": {
-    "mongodb": "3.2.6",
-    "@hapi/joi": "14.3.1",
-    "debug": "4.1.1"
+    "@hapi/joi": "15.0.3",
+    "debug": "4.1.1",
+    "expect.js": "^0.3.1",
+    "mongodb": "3.2.7"
   },
   "devDependencies": {
     "chai": "4.2.0",
@@ -36,6 +44,7 @@
     "mosca": "2.8.3",
     "aedes": "0.38.0",
     "request": "2.88.0",
-    "mqtt": "3.0.0"
+    "mqtt": "3.0.0",
+    "supertest": "4.0.2"
   }
 }
