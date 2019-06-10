@@ -140,36 +140,4 @@ describe('Ponte as an MQTT server', function () {
             })
     })
 
-    it('should throw a connection error if there is an authentication error', function (done) {
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            username: 'authenticationError',
-            password: 'unknown'
-        })
-        client.on('connect', function () {
-            client.end()
-            done(new Error('Expected connection error'))
-        })
-        client.on('error', function (error) {
-            client.end()
-            expect(error.message).to.eql('Connection refused: Bad username or password')
-            done()
-        })
-    })
-
-    it('should throw a connection error if the user is not authorized or bad password', function (done) {
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            username: 'ali',
-            password: 'kingdom'
-        })
-        client.on('connect', function () {
-            client.end()
-            done(new Error('Expected connection error'))
-        })
-        client.on('error', function (error) {
-            client.end()
-            expect(error.message).to.eql('Connection refused: Bad username or password')
-            done()
-        })
-    })
-
 })
