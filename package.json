@@ -4,7 +4,7 @@
   "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --recursive --bail --reporter spec tests",
+    "test": "mocha --exit --recursive --bail --reporter spec tests",
     "ci": "mocha --recursive --bail --watch tests",
     "standard-lib": "standard lib/*.js --fix",
     "standard-test": "standard tests/*.js --fix",
