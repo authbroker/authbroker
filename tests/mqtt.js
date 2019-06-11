@@ -10,7 +10,7 @@ var ponte = require('ponte')
 var authBroker = require('../lib/index')
 var expect = require('expect.js')
 
-describe('Ponte as an MQTT server', function () {
+describe('Test against MQTT server', function () {
     var settings
     var instance
 
@@ -138,7 +138,7 @@ describe('Ponte as an MQTT server', function () {
                     .set('x-client-id', 'r92')
                     .expect(200, 'world')
             })
-        done()
+            done()
     })
 
 })
