@@ -136,8 +136,9 @@ describe('Ponte as an MQTT server', function () {
                     .get('/resources/ali/hello')
                     .auth('mohammad', 'allah')
                     .set('x-client-id', 'r92')
-                    .expect(200, 'world', done)
+                    .expect(200, 'world')
             })
+        done()
     })
 
 })
