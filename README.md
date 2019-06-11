@@ -21,11 +21,11 @@ npm test
 ``` bash
 node ./lib/insertDemoDB.js
 ```
-It fill DB with demo clients and users. 
+It fills DB with demo clients and users. 
 
 
 ### How Using it
-This module can be used with different brokers like [Mosca](https://github.com/mcollina/mosca), [Aedes](https://github.com/mcollina/aedes), [Ponte](http://github.com/eclipse/ponte).
+This module use Node-style callback and it can be used with different brokers like [Mosca](https://github.com/mcollina/mosca), [Aedes](https://github.com/mcollina/aedes), [Ponte](http://github.com/eclipse/ponte).
 
 ``` js
 
@@ -75,25 +75,10 @@ var ponteSettings = {
 
 var server = ponte(ponteSettings)
 
-server.on('clientConnected', function (client) {
-  console.log('Client connected', client.id)
-})
-
-// fired when a message is received
-server.on('published', function (packet, client) {
-  console.log('Published', packet.payload)
-})
-
-server.on('updated', function (resource, buffer) {
-  console.log('Resource Updated', resource, buffer)
-})
-
-server.on('ready', setup)
-
 // fired when the server is ready
-function setup() {
+server.on('ready', function() {
   console.log('Broker is up and running')
-}
+})
 
 ```
 
@@ -110,22 +95,19 @@ The authentication performs with Mongodb server directly. You can change and cus
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'allah', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
-        keepAlive: 20,
-        limitW: 50,  //50kb is allowable for writting packet data in every publish
-        limitMPM: 3 // 3 messages per minute can write
+        topics: ['hello/#', 'username', 'mahdi/hello', 'mohammad']
       },
       {
         type: 'http',
         enabled: true,
         secret: { type: 'pbkdf2', pwdhash: 'qdsaFGhas32eWGWa=AD2Csgj', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: ['hello/+', 'username', 'mahdi/hello', 'mohammad']
       },
       {
         type: 'coap',
         enabled: true,
-        secret: { type: 'basic', pwdhash: 'hadi', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        secret: { type: 'basic', pwdhash: 'hadi' },
+        topics: ['#']
       }
     ]
   }
