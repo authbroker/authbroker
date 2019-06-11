@@ -2,7 +2,7 @@ os:
   - linux
 services: mongodb
 before_script:
-  - sleep 15
+  - sleep 5
 language: node_js
 node_js:
   - stable
