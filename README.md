@@ -2,7 +2,7 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Build Status](https://travis-ci.org/authbroker/authbroker.svg)](https://travis-ci.com/authbroker/authbroker) [![Greenkeeper badge](https://badges.greenkeeper.io/authbroker/authbroker.svg)](https://greenkeeper.io/)
 
-Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.
+Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things. This repo is under development.
 
 
 ##  Getting Started
@@ -14,29 +14,52 @@ Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJ
 git clone https://github.com/authbroker/authbroker
 cd authbroker
 npm install
-npm test
+node ./example/broker.js
 ```
 
 * If you are running in Development mode, for using a Demo DB you can run
 ``` bash
 node ./lib/insertDemoDB.js
 ```
-It fill DB with demo clients and users. 
+It fills DB with demo clients and users. 
 
 
 ### How Using it
-This module can be used with different brokers like [Mosca](https://github.com/mcollina/mosca), [Aedes](https://github.com/mcollina/aedes), [Ponte](http://github.com/eclipse/ponte).
+This module use Node-style callback and it can be used with different brokers like [Mosca](https://github.com/mcollina/mosca), [Aedes](https://github.com/mcollina/aedes), [Ponte](http://github.com/eclipse/ponte).
 
 ``` js
 
 'use strict'
 
 var ponte = require('ponte')
-var authBroker = ('authbroker')  // visit 
+var authBroker = ('authbroker')
 
 var envAuth = {
   db: {
-    url: 'mongodb://localhost:27017/authbroker'
+    type: 'mongo',
+    url: 'mongodb://localhost:27017/paraffin',
+    collectionName: 'authBroker',
+    methodology: 'vertical',
+    option: {}
+  },
+  salt: {
+    salt: 'salt', //salt by pbkdf2 method
+    digest: 'sha512',
+    // size of the generated hash
+    hashBytes: 64,
+    // larger salt means hashed passwords are more resistant to rainbow table, but
+    // you get diminishing returns pretty fast
+    saltBytes: 16,
+    // more iterations means an attacker has to take longer to brute force an
+    // individual password, so larger is better. however, larger also means longer
+    // to hash the password. tune so that hashing the password takes about a
+    // second
+    iterations: 10
+  },
+  adapters: {
+    mqtt: {},
+    http: {},
+    coap: {}
   }
 }
 
@@ -55,12 +78,6 @@ var ponteSettings = {
     authorizePublish: auth.authorizePublishMQTT(),
     authorizeSubscribe: auth.authorizeSubscribeMQTT()
   },
-  coap: {
-    port: 2345, // udp
-    authenticate: auth.authenticateHTTP(),
-    authorizeGet: auth.authorizeGetHTTP(),
-    authorizePut: auth.authorizePutHTTP()
-  },
   persistence: {
     // same as http://mcollina.github.io/mosca/docs/lib/persistence/mongo.js.html
     type: 'mongo',
@@ -75,25 +92,10 @@ var ponteSettings = {
 
 var server = ponte(ponteSettings)
 
-server.on('clientConnected', function (client) {
-  console.log('Client connected', client.id)
-})
-
-// fired when a message is received
-server.on('published', function (packet, client) {
-  console.log('Published', packet.payload)
-})
-
-server.on('updated', function (resource, buffer) {
-  console.log('Resource Updated', resource, buffer)
-})
-
-server.on('ready', setup)
-
 // fired when the server is ready
-function setup() {
+server.on('ready', function() {
   console.log('Broker is up and running')
-}
+})
 
 ```
 
@@ -110,22 +112,19 @@ The authentication performs with Mongodb server directly. You can change and cus
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'allah', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
-        keepAlive: 20,
-        limitW: 50,  //50kb is allowable for writting packet data in every publish
-        limitMPM: 3 // 3 messages per minute can write
+        topics: ['hello/#', 'username', 'mahdi/hello', 'mohammad']
       },
       {
         type: 'http',
         enabled: true,
         secret: { type: 'pbkdf2', pwdhash: 'qdsaFGhas32eWGWa=AD2Csgj', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: ['hello/+', 'username', 'mahdi/hello', 'mohammad']
       },
       {
         type: 'coap',
         enabled: true,
-        secret: { type: 'basic', pwdhash: 'hadi', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        secret: { type: 'basic', pwdhash: 'hadi' },
+        topics: ['#']
       }
     ]
   }
