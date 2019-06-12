@@ -2,7 +2,7 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Build Status](https://travis-ci.org/authbroker/authbroker.svg)](https://travis-ci.com/authbroker/authbroker) [![Greenkeeper badge](https://badges.greenkeeper.io/authbroker/authbroker.svg)](https://greenkeeper.io/)
 
-Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.
+Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things. This repo is under development.
 
 
 ##  Getting Started
@@ -14,7 +14,7 @@ Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJ
 git clone https://github.com/authbroker/authbroker
 cd authbroker
 npm install
-npm test
+node ./example/broker.js
 ```
 
 * If you are running in Development mode, for using a Demo DB you can run
@@ -32,11 +32,34 @@ This module use Node-style callback and it can be used with different brokers li
 'use strict'
 
 var ponte = require('ponte')
-var authBroker = ('authbroker')  // visit 
+var authBroker = ('authbroker')
 
 var envAuth = {
   db: {
-    url: 'mongodb://localhost:27017/authbroker'
+    type: 'mongo',
+    url: 'mongodb://localhost:27017/paraffin',
+    collectionName: 'authBroker',
+    methodology: 'vertical',
+    option: {}
+  },
+  salt: {
+    salt: 'salt', //salt by pbkdf2 method
+    digest: 'sha512',
+    // size of the generated hash
+    hashBytes: 64,
+    // larger salt means hashed passwords are more resistant to rainbow table, but
+    // you get diminishing returns pretty fast
+    saltBytes: 16,
+    // more iterations means an attacker has to take longer to brute force an
+    // individual password, so larger is better. however, larger also means longer
+    // to hash the password. tune so that hashing the password takes about a
+    // second
+    iterations: 10
+  },
+  adapters: {
+    mqtt: {},
+    http: {},
+    coap: {}
   }
 }
 
@@ -54,12 +77,6 @@ var ponteSettings = {
     authenticate: auth.authenticateMQTT(),
     authorizePublish: auth.authorizePublishMQTT(),
     authorizeSubscribe: auth.authorizeSubscribeMQTT()
-  },
-  coap: {
-    port: 2345, // udp
-    authenticate: auth.authenticateHTTP(),
-    authorizeGet: auth.authorizeGetHTTP(),
-    authorizePut: auth.authorizePutHTTP()
   },
   persistence: {
     // same as http://mcollina.github.io/mosca/docs/lib/persistence/mongo.js.html
