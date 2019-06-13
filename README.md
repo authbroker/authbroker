@@ -2,7 +2,7 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Build Status](https://travis-ci.org/authbroker/authbroker.svg)](https://travis-ci.com/authbroker/authbroker) [![Greenkeeper badge](https://badges.greenkeeper.io/authbroker/authbroker.svg)](https://greenkeeper.io/)
 
-![ScreenShot](https://raw.github.com/authbroker/authbroker/blob/master/docs/asset/repository-open-graph.png)
+![image](https://raw.github.com/authbroker/authbroker/blob/master/docs/asset/repository-open-graph.png)
 Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things. This repo is under development.
 
 
