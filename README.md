@@ -23,7 +23,7 @@ node ./example/broker.js
 
 * If you are running in Development mode, for using a Demo DB you can run
 ``` bash
-node ./lib/insertDemoDB.js
+node ./example/insertDemoDB.js
 ```
 It fills DB with demo clients and users. 
 
@@ -32,11 +32,9 @@ It fills DB with demo clients and users.
 This module use Node-style callback and it can be used with different brokers like [Mosca](https://github.com/mcollina/mosca), [Aedes](https://github.com/mcollina/aedes), [Ponte](http://github.com/eclipse/ponte).
 
 ``` js
-
 'use strict'
-
 var ponte = require('ponte')
-var authBroker = ('authbroker')
+var AuthBroker = require('@authbroker/authbroker')
 
 var envAuth = {
   db: {
@@ -107,7 +105,6 @@ server.on('ready', function() {
 The authentication performs with Mongodb server directly. You can change and customize Mongodb server settings with environemt variables. Data structure in Mongodb is like these;
 
 ``` javascript
-
   {
     realm: 'hello',
     clientId: 'hi313',
