@@ -27,8 +27,6 @@ const config = {
 // Generate PBKDF2 hash
 function pbkdf2(value) {
 
-  //return new Promise((resolve, reject) => {
-
   const {
     iterations,
     hashBytes,
@@ -39,7 +37,6 @@ function pbkdf2(value) {
   key = crypto.pbkdf2Sync(value, salt, iterations, hashBytes, digest)
 
   debug('Hashed > ' + value + ' : ' + key.toString('base64'))
-  //resolve(key.toString('base64'))
   return key.toString('base64')
 }
 
@@ -61,7 +58,6 @@ var docs = [
           { topic: 'hello', action: 'allow', type: 'rw' },
           { topic: 'temperature', action: 'allow', type: 'rw' },
           { topic: 'color', action: 'deny' },
-          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
         ],
         setting: {
           action: 'exactSame',  // Exactsame, 
@@ -93,7 +89,6 @@ var docs = [
           { topic: 'temperature', action: 'allow', type: 'rw' },
           { topic: 'ali', action: 'allow', type: 'rw' },
           { topic: 'ali/hello', action: 'allow', type: 'rw' }
-          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
         ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
@@ -317,16 +312,6 @@ MongoClient.connect(
   function (err, db) {
     if (err) throw err
     debug('Switched to ' + db.databaseName + ' database')
-    /*
-        db.collection(auth).drop(function (err, delOK) {
-          if (err) {
-            debug('Collection drop error: ')
-            debug(err)
-          }
-          if (delOK) debug('Collection deleted')
-          db.close()
-        })
-    */
     var dbo = db.db('paraffin')
 
     for (i = 0; i < docs.length; i++) {
