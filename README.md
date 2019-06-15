@@ -34,14 +34,14 @@ This module use Node-style callback and it can be used with different brokers li
 ``` js
 'use strict'
 var ponte = require('ponte')
-var AuthBroker = require('@authbroker/authbroker')
+var authBroker = require('@authbroker/authbroker')
 
 var envAuth = {
   db: {
-    type: 'mongo',
-    url: 'mongodb://localhost:27017/paraffin',
-    collectionName: 'authBroker',
-    methodology: 'vertical',
+    type: 'mongo',  //database type
+    url: 'mongodb://localhost:27017/paraffin',  //database url
+    collectionName: 'authBroker', //in vertical methodology, refer to collectionName
+    methodology: 'vertical',  // database artichecture will being vertical or horzintal
     option: {}
   },
   salt: {
@@ -58,7 +58,7 @@ var envAuth = {
     // second
     iterations: 10
   },
-  adapters: {
+  adapters: { // adapters setting
     mqtt: {},
     http: {},
     coap: {}
@@ -98,38 +98,54 @@ var server = ponte(ponteSettings)
 server.on('ready', function() {
   console.log('Broker is up and running')
 })
-
 ```
 
 
 The authentication performs with Mongodb server directly. You can change and customize Mongodb server settings with environemt variables. Data structure in Mongodb is like these;
 
 ``` javascript
-  {
-    realm: 'hello',
-    clientId: 'hi313',
-    adapters: [
-      {
-        type: 'mqtt',
-        enabled: true,
-        secret: { type: 'basic', pwdhash: 'allah', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello/#', 'username', 'mahdi/hello', 'mohammad']
+{  
+   realm:'hello',
+   clientId:'hi313',
+   adapters:[  
+      {  
+         type:'mqtt',
+         enabled:true,
+         secret:{  
+            type:'basic',
+            pwdhash:'allah',
+            startAfter: ISODate,
+            expiredBefore: ISODate
+         },
+         topics:[  
+            {  
+               topic:'temperature',
+               action:'allow',
+               type:'rw'
+            },
+            {  
+               topic:'ali/+/hello',
+               action:'allow',
+               type:'r'
+            }
+         ]
       },
-      {
-        type: 'http',
-        enabled: true,
-        secret: { type: 'pbkdf2', pwdhash: 'qdsaFGhas32eWGWa=AD2Csgj', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello/+', 'username', 'mahdi/hello', 'mohammad']
-      },
-      {
-        type: 'coap',
-        enabled: true,
-        secret: { type: 'basic', pwdhash: 'hadi' },
-        topics: ['#']
+      {  
+         type:'http',
+         enabled:true,
+         secret:{  
+            type:'pbkdf2',
+            pwdhash:'qdsaFGhas2eW2Csgj'
+         },
+         topics:[  
+            {  
+               topic:'hi313/#',
+               action:'allow',
+               type:'rw'
+            }
+         ]
       }
-    ]
-  }
-
+   }
 ```
 
 
