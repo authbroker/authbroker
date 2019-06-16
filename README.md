@@ -41,7 +41,7 @@ var envAuth = {
     type: 'mongo',  //database type
     url: 'mongodb://localhost:27017/paraffin',  //database url
     collectionName: 'authBroker', //in vertical methodology, refer to collectionName
-    methodology: 'vertical',  // database artichecture will being vertical or horzintal
+    methodology: 'vertical',  // database artichecture will being vertical or horizontal
     option: {}
   },
   salt: {
@@ -58,7 +58,7 @@ var envAuth = {
     // second
     iterations: 10
   },
-  wildCard: {
+  wildCard: { //wildcard is optional, if you ignore to set it, default is +, # , /
     wildcardOne: '+',
     wildcardSome: '#',
     separator: '/'
