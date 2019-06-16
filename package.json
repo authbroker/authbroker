@@ -6,8 +6,6 @@
   "scripts": {
     "test": "mocha --exit --recursive --bail --reporter spec tests",
     "ci": "mocha --recursive --bail --watch tests",
-    "standard-lib": "standard lib/*.js --fix",
-    "standard-test": "standard tests/*.js --fix",
     "start": "node ./example/broker"
   },
   "repository": {

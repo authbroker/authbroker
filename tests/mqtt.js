@@ -37,6 +37,11 @@ describe('Test against MQTT server', function () {
                 // second
                 iterations: 10
             },
+            wildCard: {
+                wildcardOne: '+',
+                wildcardSome: '#',
+                separator: '/'
+            },
             adapters: {
                 mqtt: {
                     limitW: 50,
