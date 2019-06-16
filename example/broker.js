@@ -25,11 +25,6 @@ var envAuth = {
     // second
     iterations: 10
   },
-  wildCard: {
-    wildcardOne: '+',
-    wildcardSome: '#',
-    separator: '/'
-  },
   adapters: {
     mqtt: {
       limitW: 50,
