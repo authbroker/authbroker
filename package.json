@@ -6,8 +6,6 @@
   "scripts": {
     "test": "mocha --exit --recursive --bail --reporter spec tests",
     "ci": "mocha --recursive --bail --watch tests",
-    "standard-lib": "standard lib/*.js --fix",
-    "standard-test": "standard tests/*.js --fix",
     "start": "node ./example/broker"
   },
   "repository": {
@@ -33,7 +31,8 @@
   },
   "dependencies": {
     "debug": "4.1.1",
-    "mongodb": "3.2.7"
+    "mongodb": "3.2.7",
+    "qlobber": "3.1.0"
   },
   "devDependencies": {
     "chai": "4.2.0",

@@ -25,6 +25,11 @@ var envAuth = {
     // second
     iterations: 10
   },
+  wildCard: {
+    wildcardOne: '+',
+    wildcardSome: '#',
+    separator: '/'
+  },
   adapters: {
     mqtt: {
       limitW: 50,
@@ -88,9 +93,7 @@ server.on('updated', function (resource, buffer) {
   console.log('Resource Updated', resource, buffer)
 })
 
-server.on('ready', setup)
-
 // fired when the server is ready
-function setup() {
-  console.log('Brokero is up and running')
-}
+server.on('ready', function() {
+  console.log('Broker is up and running')
+})
