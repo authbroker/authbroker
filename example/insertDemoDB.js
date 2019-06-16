@@ -87,7 +87,7 @@ var docs = [
         secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
         topics: [
           { topic: 'temperature', action: 'allow', type: 'rw' },
-          { topic: 'ali', action: 'allow', type: 'rw' },
+          { topic: 'mohammad/+', action: 'allow', type: 'rw' },
           { topic: 'ali/hello', action: 'allow', type: 'rw' }
         ],
         keepAlive: 20,
