@@ -58,6 +58,11 @@ var envAuth = {
     // second
     iterations: 10
   },
+  wildCard: {
+    wildcardOne: '+',
+    wildcardSome: '#',
+    separator: '/'
+  },
   adapters: { // adapters setting
     mqtt: {},
     http: {},
