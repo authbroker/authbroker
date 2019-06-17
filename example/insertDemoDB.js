@@ -35,7 +35,6 @@ function pbkdf2(value) {
   } = config
 
   key = crypto.pbkdf2Sync(value, salt, iterations, hashBytes, digest)
-
   debug('Hashed > ' + value + ' : ' + key.toString('base64'))
   return key.toString('base64')
 }
@@ -44,6 +43,78 @@ function pbkdf2(value) {
 
 // documents to be inserted
 var docs = [
+  {
+    ver: '1.0',
+    realm: 'mohammad',
+    clientName: 'Green House',
+    clientId: 'r92',
+    adapters: [
+      {
+        type: 'mqtt',
+        enabled: true,
+        secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
+        topics: [
+          { topic: 'temperature', action: 'allow', type: 'rw' },
+          { topic: 'mohammad/+', action: 'allow', type: 'rw' },
+          { topic: 'ali/hello/#', action: 'allow', type: 'rw' }
+        ],
+        keepAlive: 20,
+        limitW: 50,  //50kb is allowable for writting packet data in every publish
+        limitMPM: 3 // 3 messages per minute can write
+      },
+      {
+        type: 'http',
+        enabled: true,
+        secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
+        topics: [
+          { topic: 'temperature', action: 'allow', type: 'rw' },
+          { topic: 'ali', action: 'allow', type: 'rw' },
+          { topic: 'ali/hello', action: 'allow', type: 'rw' }
+          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
+        ]
+      },
+      {
+        type: 'coap',
+        enabled: false
+      }
+    ]
+  },
+  {
+    ver: '1.0',
+    realm: 'fatemeh',
+    clientName: 'Garden Relative Humidity',
+    clientId: 'marzieh',
+    adapters: [
+      {
+        type: 'mqtt',
+        enabled: true,
+        secret: { type: 'pbkdf2', pwdhash: pbkdf2('zahra'), startAfter: yesterday, expiredBefore: tomorrow },
+        topics: [
+          { topic: 'garden', action: 'allow', type: 'rw' },
+          { topic: 'mohammad/+', action: 'allow', type: 'rw' },
+          { topic: 'ali/#', action: 'allow', type: 'rw' }
+        ],
+        keepAlive: 20,
+        limitW: 50,  //50kb is allowable for writting packet data in every publish
+        limitMPM: 3 // 3 messages per minute can write
+      },
+      {
+        type: 'http',
+        enabled: true,
+        secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
+        topics: [
+          { topic: 'temperature', action: 'allow', type: 'rw' },
+          { topic: 'ali', action: 'allow', type: 'rw' },
+          { topic: 'ali/hello', action: 'allow', type: 'rw' }
+          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
+        ]
+      },
+      {
+        type: 'coap',
+        enabled: false
+      }
+    ]
+  },
   {
     ver: '1.0',
     realm: 'ali',
@@ -77,43 +148,7 @@ var docs = [
   },
   {
     ver: '1.0',
-    realm: 'mohammad',
-    clientName: 'Garden Humidity',
-    clientId: 'r92',
-    adapters: [
-      {
-        type: 'mqtt',
-        enabled: true,
-        secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
-        topics: [
-          { topic: 'temperature', action: 'allow', type: 'rw' },
-          { topic: 'mohammad/+', action: 'allow', type: 'rw' },
-          { topic: 'ali/hello', action: 'allow', type: 'rw' }
-        ],
-        keepAlive: 20,
-        limitW: 50,  //50kb is allowable for writting packet data in every publish
-        limitMPM: 3 // 3 messages per minute can write
-      },
-      {
-        type: 'http',
-        enabled: true,
-        secret: { type: 'pbkdf2', pwdhash: pbkdf2('allah'), startAfter: yesterday, expiredBefore: tomorrow },
-        topics: [
-          { topic: 'temperature', action: 'allow', type: 'rw' },
-          { topic: 'ali', action: 'allow', type: 'rw' },
-          { topic: 'ali/hello', action: 'allow', type: 'rw' }
-          //{ topic: 'humidity', action: 'timeLimit', type: 'rw', startAfter: yesterday, expiredBefore: tomorrow },
-        ]
-      },
-      {
-        type: 'coap',
-        enabled: false
-      }
-    ]
-  },
-  {
-    ver: '1.0',
-    realm: 'mahdi',
+    realm: 'hasan',
     clientName: 'Hall Temperature',
     clientId: 'm313',
     adapters: [
@@ -140,7 +175,7 @@ var docs = [
   },
   {
     ver: '1.0',
-    realm: 'ali',
+    realm: 'hosein',
     clientName: 'Hall Temperature',
     clientId: 'a110',
     adapters: [
@@ -194,7 +229,7 @@ var docs = [
   },
   {
     ver: '1.0',
-    realm: 'username',
+    realm: 'mohammad',
     clientName: 'Hall Temperature',
     clientId: 'u911',
     adapters: [
@@ -221,7 +256,7 @@ var docs = [
   },
   {
     ver: '1.0',
-    realm: 'username',
+    realm: 'jafar',
     clientName: 'Hall Temperature',
     clientId: 'u20_Expired',
     adapters: [
@@ -248,7 +283,7 @@ var docs = [
   },
   {
     ver: '1.0',
-    realm: 'hello',
+    realm: 'reza',
     clientId: 'hi313',
     adapters: [
       {
@@ -276,7 +311,94 @@ var docs = [
   },
   {
     ver: '1.0',
-    realm: 'hello',
+    realm: 'javad',
+    clientName: 'Hall Temperature',
+    clientId: 'hi110',
+    adapters: [
+      {
+        type: 'mqtt',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        keepAlive: 20,
+        limitW: 50,  //50kb is allowable for writting packet data in every publish
+        limitMPM: 3 // 3 messages per minute can write
+      },
+      {
+        type: 'http',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+      },
+      {
+        type: 'coap',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+      }
+    ]
+  },
+  {
+    ver: '1.0',
+    realm: 'hadi',
+    clientName: 'Hall Temperature',
+    clientId: 'hi110',
+    adapters: [
+      {
+        type: 'mqtt',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        keepAlive: 20,
+        limitW: 50,  //50kb is allowable for writting packet data in every publish
+        limitMPM: 3 // 3 messages per minute can write
+      },
+      {
+        type: 'http',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+      },
+      {
+        type: 'coap',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+      }
+    ]
+  },
+  {
+    ver: '1.0',
+    realm: 'hasan',
+    clientName: 'Hall Temperature',
+    clientId: 'hi110',
+    adapters: [
+      {
+        type: 'mqtt',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        keepAlive: 20,
+        limitW: 50,  //50kb is allowable for writting packet data in every publish
+        limitMPM: 3 // 3 messages per minute can write
+      },
+      {
+        type: 'http',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+      },
+      {
+        type: 'coap',
+        enabled: true,
+        secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+      }
+    ]
+  },
+  {
+    ver: '1.0',
+    realm: 'mahdi',
     clientName: 'Hall Temperature',
     clientId: 'hi110',
     adapters: [
@@ -318,7 +440,7 @@ MongoClient.connect(
       // insert multiple documents to 'users' collection using insertOne
       if (methodology === 'horzintal')
         collectionName = docs[i].realm
-        console.log('client ID: ' + docs[i].clientId.toString() + ' was inserted in db.')
+      console.log('client ID: ' + docs[i].clientId.toString() + ' was inserted in db.')
       dbo.collection(collectionName).insertOne(docs[i], function (err, res) {
         if (err) throw err
       })
