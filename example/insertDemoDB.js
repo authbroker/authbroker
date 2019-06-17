@@ -149,14 +149,18 @@ var docs = [
   {
     ver: '1.0',
     realm: 'hasan',
-    clientName: 'Hall Temperature',
-    clientId: 'm313',
+    clientName: 'Car',
+    clientId: 'logger',
     adapters: [
       {
         type: 'mqtt',
         enabled: true,
-        secret: { type: 'pbkdf2', pwdhash: pbkdf2('adrekni'), startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        secret: { type: 'pbkdf2', pwdhash: pbkdf2('persia'), startAfter: yesterday, expiredBefore: tomorrow },
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -177,13 +181,17 @@ var docs = [
     ver: '1.0',
     realm: 'hosein',
     clientName: 'Hall Temperature',
-    clientId: 'a110',
+    clientId: 'lamp110',
     adapters: [
       {
         type: 'mqtt',
         enabled: true,
-        secret: { type: 'basic', pwdhash: 'amir', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        secret: { type: 'basic', pwdhash: 'sarallah', startAfter: yesterday, expiredBefore: tomorrow },
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -210,7 +218,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'fatima', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'temperature', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -237,7 +249,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'password', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -246,7 +262,11 @@ var docs = [
         type: 'http',
         enabled: true,  // Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
         secret: { type: 'basic', pwdhash: 'password', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
@@ -264,7 +284,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'password', startAfter: yesterday, expiredBefore: today },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -273,7 +297,11 @@ var docs = [
         type: 'http',
         enabled: true,  // Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
         secret: { type: 'basic', pwdhash: 'password', startAfter: yesterday, expiredBefore: today },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
@@ -290,7 +318,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'rasoul', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -299,13 +331,21 @@ var docs = [
         type: 'http',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'hadi', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'hadi', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       }
     ]
   },
@@ -319,7 +359,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -328,13 +372,21 @@ var docs = [
         type: 'http',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       }
     ]
   },
@@ -348,7 +400,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -357,13 +413,21 @@ var docs = [
         type: 'http',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       }
     ]
   },
@@ -377,7 +441,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -386,13 +454,21 @@ var docs = [
         type: 'http',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       }
     ]
   },
@@ -406,7 +482,11 @@ var docs = [
         type: 'mqtt',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*'],
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ],
         keepAlive: 20,
         limitW: 50,  //50kb is allowable for writting packet data in every publish
         limitMPM: 3 // 3 messages per minute can write
@@ -415,13 +495,21 @@ var docs = [
         type: 'http',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       },
       {
         type: 'coap',
         enabled: true,
         secret: { type: 'basic', pwdhash: 'yaali', startAfter: yesterday, expiredBefore: tomorrow },
-        topics: ['hello', 'username', 'mahdi/hello', 'mohammad', '*']
+        topics: [
+          { topic: 'hello', action: 'allow', type: 'rw' },
+          { topic: 'hosein/hello', action: 'allow', type: 'rw' },
+          { topic: 'hasan', action: 'allow', type: 'r' },
+        ]
       }
     ]
   }

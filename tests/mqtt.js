@@ -159,14 +159,74 @@ describe('Test against MQTT server', function () {
         }
         var client = connect(option)
         client
-          .subscribe('ali/#')
-          .publish('ali/garden', 'hello')
-          .on('message', function (topic, payload) {
-            expect(topic).to.eql('ali/garden')
-            expect(payload.toString()).to.eql('hello')
+            .subscribe('ali/#')
+            .publish('ali/garden', 'hello')
+            .on('message', function (topic, payload) {
+                expect(topic).to.eql('ali/garden')
+                expect(payload.toString()).to.eql('hello')
+                done()
+            })
+    })
+
+
+    it('should throw a connection error if there is an unauthorized', function (done) {
+        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: "logger",
+            username: 'hasan',
+            password: 'baqi'
+        })
+        client.on('connect', function () {
+            client.end()
+            done(new Error('Expected connection error'))
+        })
+        client.on('error', function (error) {
+            client.end()
+            expect(error.message).to.eql('Connection refused: Not authorized')
             done()
-          })
-      })
+        })
+    })
+
+
+    it('should close the connection if an unauthorized publish is attempted', function (done) {
+        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: "lamp110",
+            username: 'hosein',
+            password: 'sarallah'
+        })
+        var error
+        client.on('message', function () {
+            error = new Error('Expected connection close')
+            client.end()
+        })
+        var closeListener = function () {
+            client.removeListener('close', closeListener)
+            if (error) {
+                console.log(error)
+                done(error)
+            } else {
+                client.end()
+                done()
+            }
+        }
+        client.on('close', closeListener)
+        client.subscribe('unauthorizedPublish')
+            .publish('unauthorizedPublish', 'world')
+    })
+
+
+    it('should denny the subscription when an unauthorized subscribe is attempted', function (done) {
+        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: "lamp110",
+            username: 'hosein',
+            password: 'sarallah'
+        })
+        client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
+            if (err) throw (err)
+            client.end()
+            expect(subscribes[0].qos).to.eql(0x80)
+            done()
+        })
+    })
 
 
 })
