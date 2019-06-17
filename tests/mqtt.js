@@ -123,6 +123,7 @@ describe('Test against MQTT server', function () {
             })
     })
 
+
     it('should expose retained messages to HTTP with pbkdf2 salted password', function (done) {
         let option = {
             port: settings.mqtt.port,
@@ -136,13 +137,36 @@ describe('Test against MQTT server', function () {
 
         let client = connect(option)
         client
-            .publish('ali/hello', 'world', { retain: true, qos: 1 }, function () {
+            .publish('temperature', '35 C', { retain: true, qos: 1 }, function () {
                 request(instance.http.server)
-                    .get('/resources/ali/hello')
+                    .get('/resources/temperature')
                     .auth('mohammad', 'allah')
                     .set('x-client-id', 'r92')
-                    .expect(200, 'world', done)
+                    .expect(200, '35 C', done)
             })
     })
+
+
+    it('should support wildcards', function (done) {
+        let option = {
+            port: settings.mqtt.port,
+            clientId: "marzieh",
+            username: "fatemeh",
+            password: "zahra",
+            clean: true,
+            protocolId: 'MQIsdp',
+            protocolVersion: 3
+        }
+        var client = connect(option)
+        client
+          .subscribe('ali/#')
+          .publish('ali/garden', 'hello')
+          .on('message', function (topic, payload) {
+            expect(topic).to.eql('ali/garden')
+            expect(payload.toString()).to.eql('hello')
+            done()
+          })
+      })
+
 
 })
