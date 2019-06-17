@@ -173,7 +173,7 @@ describe('Test against MQTT server', function () {
         var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: "yemen",
             username: 'authenticationError',
-            password: 'binSalman'
+            password: 'binSalman is Killer'
         })
         client.on('connect', function () {
             client.end()
@@ -181,10 +181,12 @@ describe('Test against MQTT server', function () {
         })
         client.on('error', function (error) {
             client.end()
-            expect(error.message).to.eql('Connection refused: Bad username or password')
+            expect(error.message).to.eql('Connection refused: Not authorized')
             done()
         })
     })
+
+
 
 
 })
