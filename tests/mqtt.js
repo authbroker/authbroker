@@ -169,7 +169,7 @@ describe('Test against MQTT server', function () {
     })
 
 
-    it('should throw a connection error if there is an authentication error', function (done) {
+    it('should throw a connection error if there is an unauthorized', function (done) {
         var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: "yemen",
             username: 'authenticationError',
@@ -187,6 +187,37 @@ describe('Test against MQTT server', function () {
     })
 
 
+    it('should close the connection if an unauthorized publish is attempted', function (done) {
+        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port)
+        var error
+        client.on('message', function () {
+            error = new Error('Expected connection close')
+            client.end()
+        })
+        var closeListener = function () {
+            client.removeListener('close', closeListener)
+            if (error) {
+                done(error)
+            } else {
+                client.end()
+                done()
+            }
+        }
+        client.on('close', closeListener)
+        client.subscribe('unauthorizedPublish')
+            .publish('unauthorizedPublish', 'world')
+    })
+
+
+    it('should denny the subscription when an unauthorized subscribe is attempted', function (done) {
+        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port)
+        client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
+            if (err) throw (err)
+            client.end()
+            expect(subscribes[0].qos).to.eql(0x80)
+            done()
+        })
+    })
 
 
 })
