@@ -201,6 +201,7 @@ describe('Test against MQTT server', function () {
         var closeListener = function () {
             client.removeListener('close', closeListener)
             if (error) {
+                console.log(error)
                 done(error)
             } else {
                 client.end()
@@ -221,6 +222,7 @@ describe('Test against MQTT server', function () {
         })
         client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
             if (err) throw (err)
+            console.log(error)
             client.end()
             expect(subscribes[0].qos).to.eql(0x80)
             done()
