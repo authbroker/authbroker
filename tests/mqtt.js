@@ -222,8 +222,6 @@ describe('Test against MQTT server', function () {
         })
         client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
             if (err) throw (err)
-            console.log(error)
-            console.log(subscribes)
             client.end()
             expect(subscribes[0].qos).to.eql(0x80)
             done()
