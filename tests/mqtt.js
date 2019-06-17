@@ -159,14 +159,32 @@ describe('Test against MQTT server', function () {
         }
         var client = connect(option)
         client
-          .subscribe('ali/#')
-          .publish('ali/garden', 'hello')
-          .on('message', function (topic, payload) {
-            expect(topic).to.eql('ali/garden')
-            expect(payload.toString()).to.eql('hello')
+            .subscribe('ali/#')
+            .publish('ali/garden', 'hello')
+            .on('message', function (topic, payload) {
+                expect(topic).to.eql('ali/garden')
+                expect(payload.toString()).to.eql('hello')
+                done()
+            })
+    })
+
+
+    it('should throw a connection error if there is an authentication error', function (done) {
+        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: "yemen",
+            username: 'authenticationError',
+            password: 'binSalman'
+        })
+        client.on('connect', function () {
+            client.end()
+            done(new Error('Expected connection error'))
+        })
+        client.on('error', function (error) {
+            client.end()
+            expect(error.message).to.eql('Connection refused: Bad username or password')
             done()
-          })
-      })
+        })
+    })
 
 
 })
