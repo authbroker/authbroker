@@ -526,7 +526,7 @@ MongoClient.connect(
 
     for (i = 0; i < docs.length; i++) {
       // insert multiple documents to 'users' collection using insertOne
-      if (methodology === 'horzintal')
+      if (methodology === 'horizontal')
         collectionName = docs[i].realm
       console.log('client ID: ' + docs[i].clientId.toString() + ' was inserted in db.')
       dbo.collection(collectionName).insertOne(docs[i], function (err, res) {
