@@ -104,20 +104,20 @@ describe('Test against MQTT server', function () {
     it('should allow a client to publish and subscribe with allowed topics', function (done) {
         let options = {
             port: settings.mqtt.port,
-            clientId: "Reader-114",
+            clientId: "0050bdee-dd8b-43a3-8602-a10f1d0e2659",
             username: "ali",
-            password: "king",
+            password: "amiralmomenin",
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
         }
         let client = connect(options)
         client
-            .subscribe('hello')
-            .publish('hello', 'world')
+            .subscribe('ali/hello')
+            .publish('ali/hello', 'world')
             .on('message', function (topic, payload) {
                 console.log(topic + ' ; ' + payload)
-                expect(topic).to.eql('hello')
+                expect(topic).to.eql('ali/hello')
                 expect(payload.toString()).to.eql('world')
                 done()
             })
@@ -127,9 +127,9 @@ describe('Test against MQTT server', function () {
     it('should expose retained messages to HTTP with pbkdf2 salted password', function (done) {
         let option = {
             port: settings.mqtt.port,
-            clientId: "r92",
+            clientId: "0186c5f8-0aad-4912-b5f2-d93ae4ef1f78",
             username: "mohammad",
-            password: "allah",
+            password: "adrekni",
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
@@ -137,12 +137,12 @@ describe('Test against MQTT server', function () {
 
         let client = connect(option)
         client
-            .publish('temperature', '35 C', { retain: true, qos: 1 }, function () {
+            .publish('daniel/home/hall/lamp', 'lamp is ON', { retain: true, qos: 1 }, function () {
                 request(instance.http.server)
-                    .get('/resources/temperature')
-                    .auth('mohammad', 'allah')
-                    .set('x-client-id', 'r92')
-                    .expect(200, '35 C', done)
+                    .get('/resources/daniel/home/hall/lamp')
+                    .auth('mohammad', 'adrekni')
+                    .set('x-client-id', '0186c5f8-0aad-4912-b5f2-d93ae4ef1f78')
+                    .expect(200, 'lamp is ON', done)
             })
     })
 
@@ -150,25 +150,25 @@ describe('Test against MQTT server', function () {
     it('should support wildcards', function (done) {
         let option = {
             port: settings.mqtt.port,
-            clientId: "marzieh",
-            username: "fatemeh",
-            password: "zahra",
+            clientId: "0050bdee-dd8b-43a3-8602-a10f1d0e2659",
+            username: "mahdi",
+            password: "adrekni",
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
         }
         var client = connect(option)
         client
-            .subscribe('ali/#')
-            .publish('ali/garden', 'hello')
+            .subscribe('mahdi/#')
+            .publish('mahdi/garden', 'hello')
             .on('message', function (topic, payload) {
-                expect(topic).to.eql('ali/garden')
+                expect(topic).to.eql('mahdi/garden')
                 expect(payload.toString()).to.eql('hello')
                 done()
             })
     })
 
-
+/*
     it('should throw a connection error if there is an unauthorized', function (done) {
         var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: "logger",
@@ -227,6 +227,6 @@ describe('Test against MQTT server', function () {
             done()
         })
     })
-
+*/
 
 })
