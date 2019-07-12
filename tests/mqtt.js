@@ -14,6 +14,11 @@ describe('Test against MQTT server', function () {
     var settings
     var instance
 
+    before(function (done) {
+        require('../example/demoDB')
+        done()
+    })
+
     beforeEach(function (done) {
         var envAuth = {
             db: {

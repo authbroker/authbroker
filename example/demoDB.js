@@ -18,7 +18,7 @@ var opts = {
 var demo = new benchmark(opts)
  
 // print valid demo data list
-debug(demo.validData())
+debug(demo.getValidData())
  
 // save valid demo data to db
 demo.insertValidData()
