@@ -128,7 +128,7 @@ describe('Test against MQTT server', function () {
             })
     })
 
-/*
+
     it('should expose retained messages to HTTP with pbkdf2 salted password', function (done) {
         let option = {
             port: settings.mqtt.port,
@@ -232,6 +232,6 @@ describe('Test against MQTT server', function () {
             done()
         })
     })
-*/
+
 
 })
