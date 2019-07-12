@@ -21,4 +21,6 @@ var demo = new benchmark(opts)
 //debug(demo.getValidData())
  
 // save valid demo data to db
-demo.insertValidData()
+demo.insertValidData(function() {
+  console.log('Demo is ready')
+})
