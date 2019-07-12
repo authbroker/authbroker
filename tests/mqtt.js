@@ -118,11 +118,11 @@ describe('Test against MQTT server', function () {
         }
         let client = connect(options)
         await client
-            .subscribe('ali/hello')
-            .publish('ali/hello', 'world')
+            .subscribe('mahdi/hello')
+            .publish('mahdi/hello', 'world')
             .on('message', function (topic, payload) {
                 console.log(topic + ' ; ' + payload)
-                expect(topic).to.eql('ali/hello')
+                expect(topic).to.eql('mahdi/hello')
                 expect(payload.toString()).to.eql('world')
                 done()
             })
