@@ -106,7 +106,7 @@ describe('Test against MQTT server', function () {
         return mqtt.connect('mqtt://localhost', options)
     }
 
-    it('should allow a client to publish and subscribe with allowed topics', async() => {
+    it('should allow a client to publish and subscribe with allowed topics', function(done) {
         let options = {
             port: settings.mqtt.port,
             clientId: "0050bdee-dd8b-43a3-8602-a10f1d0e2659",
@@ -117,7 +117,7 @@ describe('Test against MQTT server', function () {
             protocolVersion: 3
         }
         let client = connect(options)
-        await client
+        client
             .subscribe('mahdi/hello')
             .publish('mahdi/hello', 'world')
             .on('message', function (topic, payload) {
