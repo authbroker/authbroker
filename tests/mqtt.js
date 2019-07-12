@@ -142,9 +142,9 @@ describe('Test against MQTT server', function () {
 
         let client = connect(option)
         client
-            .publish('daniel/home/hall/lamp', 'lamp is ON', { retain: true, qos: 1 }, function () {
+            .publish('mahdi/home/hall/lamp', 'lamp is ON', { retain: true, qos: 1 }, function () {
                 request(instance.http.server)
-                    .get('/resources/daniel/home/hall/lamp')
+                    .get('/resources/mahdi/home/hall/lamp')
                     .auth('mohammad', 'adrekni')
                     .set('x-client-id', '0186c5f8-0aad-4912-b5f2-d93ae4ef1f78')
                     .expect(200, 'lamp is ON', done)
