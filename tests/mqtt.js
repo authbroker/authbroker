@@ -106,7 +106,7 @@ describe('Test against MQTT server', function () {
         return mqtt.connect('mqtt://localhost', options)
     }
 
-    it('should allow a client to publish and subscribe with allowed topics', function (done) {
+    it('should allow a client to publish and subscribe with allowed topics', async() => {
         let options = {
             port: settings.mqtt.port,
             clientId: "0050bdee-dd8b-43a3-8602-a10f1d0e2659",
@@ -117,7 +117,7 @@ describe('Test against MQTT server', function () {
             protocolVersion: 3
         }
         let client = connect(options)
-        client
+        await client
             .subscribe('ali/hello')
             .publish('ali/hello', 'world')
             .on('message', function (topic, payload) {
@@ -128,7 +128,7 @@ describe('Test against MQTT server', function () {
             })
     })
 
-
+/*
     it('should expose retained messages to HTTP with pbkdf2 salted password', function (done) {
         let option = {
             port: settings.mqtt.port,
@@ -173,7 +173,7 @@ describe('Test against MQTT server', function () {
             })
     })
 
-/*
+
     it('should throw a connection error if there is an unauthorized', function (done) {
         var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: "logger",
