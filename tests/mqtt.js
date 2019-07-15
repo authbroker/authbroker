@@ -3,7 +3,7 @@
  *    Matteo Collina - https://github.com/eclipse/ponte
  * Before runing this test, you should run Mongodb server in localhost and ../example/insertDemoDB.js
  *******************************************************************************/
-
+var benchmark = require('@authbroker/mongo-benchmark')
 var request = require('supertest')
 var mqtt = require('mqtt')
 var ponte = require('ponte')
@@ -13,50 +13,51 @@ var expect = require('expect.js')
 describe('Test against MQTT server', function () {
     var settings
     var instance
+    var envAuth = {
+        db: {
+            type: 'mongo',
+            url: 'mongodb://localhost:27017/paraffin',
+            collectionName: 'authBroker',
+            methodology: 'vertical',
+            option: {}
+        },
+        salt: {
+            salt: 'salt', //salt by pbkdf2 method
+            digest: 'sha512',
+            // size of the generated hash
+            hashBytes: 64,
+            // larger salt means hashed passwords are more resistant to rainbow table, but
+            // you get diminishing returns pretty fast
+            saltBytes: 16,
+            // more iterations means an attacker has to take longer to brute force an
+            // individual password, so larger is better. however, larger also means longer
+            // to hash the password. tune so that hashing the password takes about a
+            // second
+            iterations: 10
+        },
+        wildCard: {
+            wildcardOne: '+',
+            wildcardSome: '#',
+            separator: '/'
+        },
+        adapters: {
+            mqtt: {
+                limitW: 50,
+                limitMPM: 10
+            },
+            http: {},
+            coap: {}
+        }
+    }
+
 
     before(function (done) {
-        require('../example/demoDB')
+        var demo = new benchmark(envAuth)
         done()
     })
 
     beforeEach(function (done) {
-        var envAuth = {
-            db: {
-                type: 'mongo',
-                url: 'mongodb://localhost:27017/paraffin',
-                collectionName: 'authBroker',
-                methodology: 'vertical',
-                option: {}
-            },
-            salt: {
-                salt: 'salt', //salt by pbkdf2 method
-                digest: 'sha512',
-                // size of the generated hash
-                hashBytes: 64,
-                // larger salt means hashed passwords are more resistant to rainbow table, but
-                // you get diminishing returns pretty fast
-                saltBytes: 16,
-                // more iterations means an attacker has to take longer to brute force an
-                // individual password, so larger is better. however, larger also means longer
-                // to hash the password. tune so that hashing the password takes about a
-                // second
-                iterations: 10
-            },
-            wildCard: {
-                wildcardOne: '+',
-                wildcardSome: '#',
-                separator: '/'
-            },
-            adapters: {
-                mqtt: {
-                    limitW: 50,
-                    limitMPM: 10
-                },
-                http: {},
-                coap: {}
-            }
-        }
-
+        
         var auth = new authBroker(envAuth)
 
         settings = {
