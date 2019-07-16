@@ -1,5 +1,5 @@
 var benchmark = require('@authbroker/mongo-benchmark')
- 
+
 var opts = {
   db: {
     url: 'mongodb://localhost:27017/paraffin',
@@ -15,8 +15,13 @@ var opts = {
 }
 
 var demo = new benchmark(opts)
- 
-// save valid demo data to db
-demo.insertValidData(function() {
-  console.log('Demo is ready...')
+
+validData = demo.validData()
+
+demo.readData({ clientId: validData[1].clientId, realm: validData[1].realm }, function (res) {
+  // save valid demo data to db
+  if (!res)
+    demo.insertValidData(function () {
+      console.log('Demo is ready...')
+    })
 })
