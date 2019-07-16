@@ -1,11 +1,10 @@
-var debug = require('debug')
 var benchmark = require('@authbroker/mongo-benchmark')
  
 var opts = {
   db: {
     url: 'mongodb://localhost:27017/paraffin',
     collectionName: 'authBroker',
-    methodology: 'vertical'
+    methodology: 'horizontal'
   },
   salt: {
     iterations: 10,
@@ -17,10 +16,7 @@ var opts = {
 
 var demo = new benchmark(opts)
  
-// print valid demo data list
-//debug(demo.getValidData())
- 
 // save valid demo data to db
 demo.insertValidData(function() {
-  console.log('Demo is ready')
+  console.log('Demo is ready...')
 })

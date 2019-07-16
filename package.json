@@ -4,6 +4,7 @@
   "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
   "main": "lib/index.js",
   "scripts": {
+    "pretest": "node ./example/demoDB",
     "test": "mocha --exit --recursive --bail --reporter spec tests",
     "ci": "mocha --recursive --bail --watch tests",
     "start": "node ./example/broker"
@@ -44,7 +45,7 @@
     "mqtt": "3.0.0",
     "expect.js": "^0.3.1",
     "supertest": "4.0.2",
-    "@authbroker/mongo-benchmark": "0.0.5"
+    "@authbroker/mongo-benchmark": "0.0.6"
   },
   "publishConfig": {
     "access": "public"

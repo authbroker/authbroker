@@ -4,21 +4,24 @@
  * Before runing this test, you should run Mongodb server in localhost and ../example/insertDemoDB.js
  *******************************************************************************/
 var benchmark = require('@authbroker/mongo-benchmark')
-var request = require('supertest')
 var mqtt = require('mqtt')
 var ponte = require('ponte')
 var authBroker = require('../lib/index')
 var expect = require('expect.js')
 
+
 describe('Test against MQTT server', function () {
     var settings
     var instance
+    var demo
+    var validData
+
     var envAuth = {
         db: {
             type: 'mongo',
             url: 'mongodb://localhost:27017/paraffin',
             collectionName: 'authBroker',
-            methodology: 'vertical',
+            methodology: 'horzintal',
             option: {}
         },
         salt: {
@@ -51,15 +54,11 @@ describe('Test against MQTT server', function () {
     }
 
 
-    before(function (done) {
-        var demo = new benchmark(envAuth)
-        done()
-    })
-
     beforeEach(function (done) {
-        
         var auth = new authBroker(envAuth)
-
+        demo = new benchmark(envAuth)
+        validData = demo.validData()
+        
         settings = {
             logger: {
                 level: 'info',
@@ -94,12 +93,13 @@ describe('Test against MQTT server', function () {
                 url: 'mongodb://localhost:27017/ponte'
             }
         }
-        //settings = ponteSettings()
+        
         instance = ponte(settings, done)
     })
 
     afterEach(function (done) {
         instance.close(done)
+
     })
 
 
@@ -107,68 +107,55 @@ describe('Test against MQTT server', function () {
         return mqtt.connect('mqtt://localhost', options)
     }
 
-    it('should allow a client to publish and subscribe with allowed topics', function(done) {
+    it('should allow a client to publish and subscribe with allowed topics', function (done) {
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let password = validData[2].adapters[0].secret.pwdhash
+        let topic = validData[2].adapters[0].topics[0].topic
+
         let options = {
             port: settings.mqtt.port,
-            clientId: "0050bdee-dd8b-43a3-8602-a10f1d0e2659",
-            username: "ali",
-            password: "amiralmomenin",
+            clientId: clientId,
+            username: username,
+            password: password,
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
         }
         let client = connect(options)
         client
-            .subscribe('mahdi/hello')
-            .publish('mahdi/hello', 'world')
+            .subscribe(topic)
+            .publish(topic, 'world')
             .on('message', function (topic, payload) {
                 console.log(topic + ' ; ' + payload)
-                expect(topic).to.eql('mahdi/hello')
+                expect(topic).to.eql(topic)
                 expect(payload.toString()).to.eql('world')
                 done()
             })
     })
 
 
-    it('should expose retained messages to HTTP with pbkdf2 salted password', function (done) {
+    it('should support wildcards in mqtt', function (done) {
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+
         let option = {
             port: settings.mqtt.port,
-            clientId: "0186c5f8-0aad-4912-b5f2-d93ae4ef1f78",
-            username: "mohammad",
-            password: "adrekni",
+            clientId: clientId,
+            username: username,
+            password: mqttPassword,
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
         }
 
-        let client = connect(option)
-        client
-            .publish('mahdi/home/hall/lamp', 'lamp is ON', { retain: true, qos: 1 }, function () {
-                request(instance.http.server)
-                    .get('/resources/mahdi/home/hall/lamp')
-                    .auth('mohammad', 'adrekni')
-                    .set('x-client-id', '0186c5f8-0aad-4912-b5f2-d93ae4ef1f78')
-                    .expect(200, 'lamp is ON', done)
-            })
-    })
-
-
-    it('should support wildcards', function (done) {
-        let option = {
-            port: settings.mqtt.port,
-            clientId: "0050bdee-dd8b-43a3-8602-a10f1d0e2659",
-            username: "mahdi",
-            password: "adrekni",
-            clean: true,
-            protocolId: 'MQIsdp',
-            protocolVersion: 3
-        }
         var client = connect(option)
         client
-            .subscribe('mahdi/#')
-            .publish('mahdi/garden', 'hello')
+            .subscribe('ali/#')
+            .publish('ali/garden', 'hello')
             .on('message', function (topic, payload) {
-                expect(topic).to.eql('mahdi/garden')
+                expect(topic).to.eql('ali/garden')
                 expect(payload.toString()).to.eql('hello')
                 done()
             })
@@ -194,10 +181,15 @@ describe('Test against MQTT server', function () {
 
 
     it('should close the connection if an unauthorized publish is attempted', function (done) {
+
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+
         var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            clientId: "lamp110",
-            username: 'hosein',
-            password: 'sarallah'
+            clientId: clientId,
+            username: username,
+            password: mqttPassword
         })
         var error
         client.on('message', function () {
@@ -220,17 +212,21 @@ describe('Test against MQTT server', function () {
     })
 
 
-    it('should denny the subscription when an unauthorized subscribe is attempted', function (done) {
+    it('should denny the subscription when an unauthorized subscribe is attempted', function () {
+
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+
         var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            clientId: "lamp110",
-            username: 'hosein',
-            password: 'sarallah'
+            clientId: clientId,
+            username: username,
+            password: mqttPassword
         })
         client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
             if (err) throw (err)
             client.end()
-            expect(subscribes[0].qos).to.eql(0x80)
-            done()
+            expect(subscribes[0].qos).to.eql(0x80)  
         })
     })
 
