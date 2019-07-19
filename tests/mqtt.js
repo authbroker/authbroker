@@ -54,11 +54,11 @@ describe('Test against MQTT server', function () {
     }
 
 
-    beforeEach(function (done) {
+    before(function (done) {
         var auth = new authBroker(envAuth)
         demo = new benchmark(envAuth)
         validData = demo.validData()
-        
+
         settings = {
             logger: {
                 level: 'info',
@@ -93,21 +93,24 @@ describe('Test against MQTT server', function () {
                 url: 'mongodb://localhost:27017/ponte'
             }
         }
-        
+
         instance = ponte(settings, done)
     })
-
+    
+    /*
     afterEach(function (done) {
         instance.close(done)
 
     })
+    */
 
 
     function connect(options) {
         return mqtt.connect('mqtt://localhost', options)
     }
 
-    it('should allow a client to publish and subscribe with allowed topics', async() => {
+
+    it('should allow a client to publish and subscribe with allowed topics', function (done) {
         let clientId = validData[2].clientId
         let username = validData[2].realm
         let password = validData[2].adapters[0].secret.pwdhash
@@ -123,7 +126,7 @@ describe('Test against MQTT server', function () {
             protocolVersion: 3
         }
         let client = connect(options)
-        await client
+        client
             .subscribe(topic)
             .publish(topic, 'world')
             .on('message', function (topic, payload) {
@@ -135,10 +138,10 @@ describe('Test against MQTT server', function () {
     })
 
 
-    it('should support wildcards in mqtt', async()=> {
-        let clientId = validData[2].clientId
-        let username = validData[2].realm
-        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+    it('should support wildcards in mqtt', function (done) {
+        let clientId = validData[1].clientId
+        let username = validData[1].realm
+        let mqttPassword = validData[1].adapters[0].secret.pwdhash
 
         let option = {
             port: settings.mqtt.port,
@@ -150,20 +153,23 @@ describe('Test against MQTT server', function () {
             protocolVersion: 3
         }
 
-        var client = connect(option)
-        await client
-            .subscribe('ali/#')
-            .publish('ali/garden', 'hello')
+        let client = connect(option)
+        client
+            .subscribe('mohammad/#')
+            .publish('mohammad/garden', 'hello')
             .on('message', function (topic, payload) {
-                expect(topic).to.eql('ali/garden')
+                console.log(topic)
+                console.log(payload.toString())
+                expect(topic).to.eql('mohammad/garden')
                 expect(payload.toString()).to.eql('hello')
-                done()
             })
+            client.end()
+            done()
     })
 
 
-    it('should throw a connection error if there is an unauthorized', async()=> {
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+    it('should throw a connection error if there is an unauthorized', function (done) {
+        let client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: "logger",
             username: 'hasan',
             password: 'baqi'
@@ -174,20 +180,42 @@ describe('Test against MQTT server', function () {
         })
         client.on('error', function (error) {
             client.end()
+            //console.log(error)
             expect(error.message).to.eql('Connection refused: Not authorized')
             done()
         })
     })
 
-    /*
 
+
+    it('should denny the subscription when an unauthorized subscribe is attempted', function(done) {
+
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+
+        let client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: clientId,
+            username: username,
+            password: mqttPassword
+        })
+        client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
+            if (err) throw (err)
+            client.end()
+            expect(subscribes[0].qos).to.eql(0x80)
+            done()
+        })
+    })
+
+
+    
     it('should close the connection if an unauthorized publish is attempted', function(done) {
 
         let clientId = validData[2].clientId
         let username = validData[2].realm
         let mqttPassword = validData[2].adapters[1].secret.pwdhash
 
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+        let client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: clientId,
             username: username,
             password: mqttPassword
@@ -200,37 +228,16 @@ describe('Test against MQTT server', function () {
         var closeListener = function () {
             client.removeListener('close', closeListener)
             if (error) {
-                console.log(error)
-                //done(error)
+                //console.log(error)
+                done(error)
             } else {
                 client.end()
-                //done()
+                done()
             }
         }
         client.on('close', closeListener)
-        client.subscribe('unauthorizedPublish')
-            .publish('unauthorizedPublish', 'world')
+        client.subscribe('ali/#')
+            .publish('ali/unauthorizedPublish', 'world')
     })
 
-
-    it('should denny the subscription when an unauthorized subscribe is attempted', function(done) {
-
-        let clientId = validData[2].clientId
-        let username = validData[2].realm
-        let mqttPassword = validData[2].adapters[1].secret.pwdhash
-
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            clientId: clientId,
-            username: username,
-            password: mqttPassword
-        })
-        client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
-            if (err) throw (err)
-            client.end()
-            expect(subscribes[0].qos).to.eql(0x80)  
-        })
-    })
-
-    */
-   
 })
