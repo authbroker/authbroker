@@ -8,7 +8,7 @@ var envAuth = {
     type: 'mongo',
     url: 'mongodb://localhost:27017/paraffin',
     collectionName: 'authBroker',
-    methodology: 'vertical',
+    methodology: 'horizontal',
     option: {}
   },
   salt: {

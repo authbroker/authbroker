@@ -6,4 +6,4 @@ node_js:
 services:
   - mongodb
 before_script:
-  - node ./example/insertDemoDB
+  - node ./example/demoDB

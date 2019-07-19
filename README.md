@@ -18,12 +18,12 @@ Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJ
 git clone https://github.com/authbroker/authbroker
 cd authbroker
 npm install
-node ./example/broker.js
+npm start
 ```
+It runs Broker example. You should attention broker needs a database to authenticate users. If you are running in Development mode, for using a Demo DB you can run
 
-* If you are running in Development mode, for using a Demo DB you can run
 ``` bash
-node ./example/insertDemoDB.js
+node ./example/demoDB.js
 ```
 It fills DB with demo clients and users. 
 

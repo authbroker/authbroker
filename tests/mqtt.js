@@ -3,56 +3,61 @@
  *    Matteo Collina - https://github.com/eclipse/ponte
  * Before runing this test, you should run Mongodb server in localhost and ../example/insertDemoDB.js
  *******************************************************************************/
-
-var request = require('supertest')
+var benchmark = require('@authbroker/mongo-benchmark')
 var mqtt = require('mqtt')
 var ponte = require('ponte')
 var authBroker = require('../lib/index')
 var expect = require('expect.js')
 
+
 describe('Test against MQTT server', function () {
     var settings
     var instance
+    var demo
+    var validData
 
-    beforeEach(function (done) {
-        var envAuth = {
-            db: {
-                type: 'mongo',
-                url: 'mongodb://localhost:27017/paraffin',
-                collectionName: 'authBroker',
-                methodology: 'vertical',
-                option: {}
+    var envAuth = {
+        db: {
+            type: 'mongo',
+            url: 'mongodb://localhost:27017/paraffin',
+            collectionName: 'authBroker',
+            methodology: 'horzintal',
+            option: {}
+        },
+        salt: {
+            salt: 'salt', //salt by pbkdf2 method
+            digest: 'sha512',
+            // size of the generated hash
+            hashBytes: 64,
+            // larger salt means hashed passwords are more resistant to rainbow table, but
+            // you get diminishing returns pretty fast
+            saltBytes: 16,
+            // more iterations means an attacker has to take longer to brute force an
+            // individual password, so larger is better. however, larger also means longer
+            // to hash the password. tune so that hashing the password takes about a
+            // second
+            iterations: 10
+        },
+        wildCard: {
+            wildcardOne: '+',
+            wildcardSome: '#',
+            separator: '/'
+        },
+        adapters: {
+            mqtt: {
+                limitW: 50,
+                limitMPM: 10
             },
-            salt: {
-                salt: 'salt', //salt by pbkdf2 method
-                digest: 'sha512',
-                // size of the generated hash
-                hashBytes: 64,
-                // larger salt means hashed passwords are more resistant to rainbow table, but
-                // you get diminishing returns pretty fast
-                saltBytes: 16,
-                // more iterations means an attacker has to take longer to brute force an
-                // individual password, so larger is better. however, larger also means longer
-                // to hash the password. tune so that hashing the password takes about a
-                // second
-                iterations: 10
-            },
-            wildCard: {
-                wildcardOne: '+',
-                wildcardSome: '#',
-                separator: '/'
-            },
-            adapters: {
-                mqtt: {
-                    limitW: 50,
-                    limitMPM: 10
-                },
-                http: {},
-                coap: {}
-            }
+            http: {},
+            coap: {}
         }
+    }
 
+
+    before(function (done) {
         var auth = new authBroker(envAuth)
+        demo = new benchmark(envAuth)
+        validData = demo.validData()
 
         settings = {
             logger: {
@@ -88,48 +93,61 @@ describe('Test against MQTT server', function () {
                 url: 'mongodb://localhost:27017/ponte'
             }
         }
-        //settings = ponteSettings()
+
         instance = ponte(settings, done)
     })
-
+    
+    /*
     afterEach(function (done) {
         instance.close(done)
+
     })
+    */
 
 
     function connect(options) {
         return mqtt.connect('mqtt://localhost', options)
     }
 
+
     it('should allow a client to publish and subscribe with allowed topics', function (done) {
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let password = validData[2].adapters[0].secret.pwdhash
+        let topic = validData[2].adapters[0].topics[0].topic
+
         let options = {
             port: settings.mqtt.port,
-            clientId: "Reader-114",
-            username: "ali",
-            password: "king",
+            clientId: clientId,
+            username: username,
+            password: password,
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
         }
         let client = connect(options)
         client
-            .subscribe('hello')
-            .publish('hello', 'world')
+            .subscribe(topic)
+            .publish(topic, 'world')
             .on('message', function (topic, payload) {
                 console.log(topic + ' ; ' + payload)
-                expect(topic).to.eql('hello')
+                expect(topic).to.eql(topic)
                 expect(payload.toString()).to.eql('world')
                 done()
             })
     })
 
 
-    it('should expose retained messages to HTTP with pbkdf2 salted password', function (done) {
+    it('should support wildcards in mqtt', function (done) {
+        let clientId = validData[1].clientId
+        let username = validData[1].realm
+        let mqttPassword = validData[1].adapters[0].secret.pwdhash
+
         let option = {
             port: settings.mqtt.port,
-            clientId: "r92",
-            username: "mohammad",
-            password: "allah",
+            clientId: clientId,
+            username: username,
+            password: mqttPassword,
             clean: true,
             protocolId: 'MQIsdp',
             protocolVersion: 3
@@ -137,40 +155,21 @@ describe('Test against MQTT server', function () {
 
         let client = connect(option)
         client
-            .publish('temperature', '35 C', { retain: true, qos: 1 }, function () {
-                request(instance.http.server)
-                    .get('/resources/temperature')
-                    .auth('mohammad', 'allah')
-                    .set('x-client-id', 'r92')
-                    .expect(200, '35 C', done)
-            })
-    })
-
-
-    it('should support wildcards', function (done) {
-        let option = {
-            port: settings.mqtt.port,
-            clientId: "marzieh",
-            username: "fatemeh",
-            password: "zahra",
-            clean: true,
-            protocolId: 'MQIsdp',
-            protocolVersion: 3
-        }
-        var client = connect(option)
-        client
-            .subscribe('ali/#')
-            .publish('ali/garden', 'hello')
+            .subscribe('mohammad/#')
+            .publish('mohammad/garden', 'hello')
             .on('message', function (topic, payload) {
-                expect(topic).to.eql('ali/garden')
+                console.log(topic)
+                console.log(payload.toString())
+                expect(topic).to.eql('mohammad/garden')
                 expect(payload.toString()).to.eql('hello')
-                done()
             })
+            client.end()
+            done()
     })
 
 
     it('should throw a connection error if there is an unauthorized', function (done) {
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+        let client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
             clientId: "logger",
             username: 'hasan',
             password: 'baqi'
@@ -181,44 +180,24 @@ describe('Test against MQTT server', function () {
         })
         client.on('error', function (error) {
             client.end()
+            //console.log(error)
             expect(error.message).to.eql('Connection refused: Not authorized')
             done()
         })
     })
 
 
-    it('should close the connection if an unauthorized publish is attempted', function (done) {
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            clientId: "lamp110",
-            username: 'hosein',
-            password: 'sarallah'
-        })
-        var error
-        client.on('message', function () {
-            error = new Error('Expected connection close')
-            client.end()
-        })
-        var closeListener = function () {
-            client.removeListener('close', closeListener)
-            if (error) {
-                console.log(error)
-                done(error)
-            } else {
-                client.end()
-                done()
-            }
-        }
-        client.on('close', closeListener)
-        client.subscribe('unauthorizedPublish')
-            .publish('unauthorizedPublish', 'world')
-    })
 
+    it('should denny the subscription when an unauthorized subscribe is attempted', function(done) {
 
-    it('should denny the subscription when an unauthorized subscribe is attempted', function (done) {
-        var client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
-            clientId: "lamp110",
-            username: 'hosein',
-            password: 'sarallah'
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+
+        let client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: clientId,
+            username: username,
+            password: mqttPassword
         })
         client.subscribe('unauthorizedSubscribe', function (err, subscribes) {
             if (err) throw (err)
@@ -228,5 +207,37 @@ describe('Test against MQTT server', function () {
         })
     })
 
+
+    
+    it('should close the connection if an unauthorized publish is attempted', function(done) {
+
+        let clientId = validData[2].clientId
+        let username = validData[2].realm
+        let mqttPassword = validData[2].adapters[1].secret.pwdhash
+
+        let client = mqtt.connect('mqtt://localhost:' + settings.mqtt.port, {
+            clientId: clientId,
+            username: username,
+            password: mqttPassword
+        })
+        var error
+        client.on('message', function () {
+            error = new Error('Expected connection close')
+            client.end()
+        })
+        var closeListener = function () {
+            client.removeListener('close', closeListener)
+            if (error) {
+                //console.log(error)
+                done(error)
+            } else {
+                client.end()
+                done()
+            }
+        }
+        client.on('close', closeListener)
+        client.subscribe('ali/#')
+            .publish('ali/unauthorizedPublish', 'world')
+    })
 
 })
