@@ -45,7 +45,7 @@
     "mqtt": "3.0.0",
     "expect.js": "^0.3.1",
     "supertest": "4.0.2",
-    "@authbroker/mongo-benchmark": "0.0.7"
+    "@authbroker/mongo-benchmark": "0.0.9"
   },
   "publishConfig": {
     "access": "public"
