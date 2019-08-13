@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "debug": "4.1.1",
-    "mongodb": "3.2.7",
+    "mongodb": "3.3.0",
     "qlobber": "3.1.0"
   },
   "devDependencies": {
