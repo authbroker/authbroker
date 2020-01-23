@@ -42,7 +42,7 @@
     "mosca": "2.8.3",
     "aedes": "0.39.0",
     "request": "2.88.0",
-    "mqtt": "3.0.0",
+    "mqtt": "3.0.1",
     "expect.js": "^0.3.1",
     "supertest": "4.0.2",
     "@authbroker/mongo-benchmark": "0.0.9"
