@@ -1,6 +1,6 @@
 # Authentication and Authorization Module for Brokers
 
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Build Status](https://travis-ci.org/authbroker/authbroker.svg)](https://travis-ci.com/authbroker/authbroker) [![Greenkeeper badge](https://badges.greenkeeper.io/authbroker/authbroker.svg)](https://greenkeeper.io/)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Build Status](https://travis-ci.org/authbroker/authbroker.svg)](https://travis-ci.com/authbroker/authbroker)
 
 <div align="center">
     <img src="https://github.com/authbroker/authbroker/blob/master/docs/asset/repository-open-graph.png" width="500px"</img> 
@@ -11,7 +11,7 @@ Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJ
 
 ##  Getting Started
 
-* Install mongo locally using [how to install mongodb](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04) and [Mongo docs](https://docs.mongodb.com/manual/administration/install-community/). Make sure it's working.
+* Install [Keycloak](https://www.keycloak.org/) locally. Make sure it's working.
 * If you want to run a test locally, clone this repo.
 
 ``` bash
@@ -20,12 +20,12 @@ cd authbroker
 npm install
 npm start
 ```
-It runs Broker example. You should attention broker needs a database to authenticate users. If you are running in Development mode, for using a Demo DB you can run
+It runs Broker example. You should attention broker needs a configure keycloak client
 
 ``` bash
-node ./example/demoDB.js
+node ./example/demoKeycloak.js
 ```
-It fills DB with demo clients and users. 
+It configs keycloak by demo clients and users. 
 
 
 ### How Using it
