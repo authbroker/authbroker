@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  keycloak:
+    image: jboss/keycloak
+    container_name: demo-keycloak
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    command:
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      - "-Dkeycloak.migration.action=import"
+      - "-Dkeycloak.migration.provider=dir"
+      - "-Dkeycloak.migration.dir=/opt/jboss/keycloak/import"
+      - "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+    ports:
+      - 8080:8080
+    volumes:
+      - "./import_realm:/opt/jboss/keycloak/import"
