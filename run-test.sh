@@ -12,7 +12,9 @@ if $(curl --output /dev/null --silent --head --fail http://localhost:8080); then
     echo "Keycloak is running"
 else
     # Run Keycloak and Import demo data
-    docker-compose -f $MY_PATH/docker/docker-compose.yml up -d
+    #docker-compose -f $MY_PATH/docker/docker-compose.yml up -d
+    docker build -t authbroker:test .
+    docker run -d -p 8080:8080 authbroker:test 
     
     attempt_counter=0
     max_attempts=100
@@ -30,4 +32,4 @@ fi
 echo 'Running Tests'
 npm run test
 
-docker-compose -f $MY_PATH/docker/docker-compose.yml down
+docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")
