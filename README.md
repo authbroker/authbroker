@@ -19,8 +19,9 @@ git clone https://github.com/authbroker/authbroker
 cd authbroker
 npm install
 bash run-test.sh
+npm run test
 ```
-It runs Keycloak in docker-compose and import demo data.
+It runs Keycloak by docker and import demo data to IOT_Realm realm. also you can run Keycloak by docker-compose.
 
 ``` bash
 sudo docker-comopse -f ./docker/docker-compose.yml up -d
