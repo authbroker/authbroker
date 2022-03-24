@@ -1,54 +1,47 @@
 {
-  "name": "@authbroker/authbroker",
-  "version": "0.0.5",
-  "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
-  "main": "lib/keycloak.js",
-  "scripts": {
-    "pretest": "node ./example/demoDB",
-    "test": "mocha --exit --recursive --bail --reporter spec tests",
-    "ci": "mocha --recursive --bail --watch tests",
-    "start": "node ./example/broker"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/authbroker/authbroker"
-  },
-  "keywords": [
-    "moscajs",
-    "aedes",
-    "ponte",
-    "authentication",
-    "authorization",
-    "mqtt",
-    "http",
-    "coap",
-    "credintial",
-    "access token"
-  ],
-  "author": "Hadi Mahdavi",
-  "email": "kamerdack@gmail.com",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/authbroker/authbroker/issues"
-  },
-  "dependencies": {
-    "debug": "4.1.1",
-    "jsonwebtoken": "8.5.1",
-    "request": "2.88.0",
-    "qlobber": "3.1.0"
-  },
-  "devDependencies": {
-    "@authbroker/mongo-benchmark": "0.0.9",
-    "aedes": "0.39.0",
-    "chai": "4.2.0",
-    "expect.js": "^0.3.1",
-    "mocha": "6.2.0",
-    "mosca": "2.8.3",
-    "mqtt": "3.0.0",
-    "ponte": "0.0.16",
-    "supertest": "4.0.2"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@authbroker/authbroker",
+    "version": "0.0.10",
+    "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
+    "main": "./index.js",
+    "scripts": {
+        "test": "tap test/*.test.js --no-check-coverage",
+        "debug": "nodemon --inspect ./example/broker.js",
+        "ci": "rm -rf node_modules && npm install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/authbroker/authbroker"
+    },
+    "keywords": [
+        "moscajs",
+        "aedes",
+        "authentication",
+        "authorization",
+        "mqtt",
+        "http",
+        "coap",
+        "credintial",
+        "keycloak"
+    ],
+    "author": "Hadi Mahdavi",
+    "email": "kamerdack@gmail.com",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/authbroker/authbroker/issues"
+    },
+    "dependencies": {
+        "pino": "^7.9.1",
+        "pino-pretty": "^7.5.4",
+        "axios": "^0.26.1",
+        "qs": "^6.10.3",
+        "jsonwebtoken": "^8.5.1"
+    },
+    "devDependencies": {
+        "mqtt": "4.3.7",
+        "aedes": "0.46.3",
+        "tap": "16.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

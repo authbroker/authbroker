@@ -1,94 +1,30 @@
-'use strict'
+const aedes = require("aedes")({
+    persistence: new require("aedes-persistence")()
+});
+const server = require("net").createServer(aedes.handle);
+const port = 1883;
 
-var ponte = require('ponte')
-var AuthBroker = require('../lib/index')
+const Authorizer = require("../");
 
-var envAuth = {
-  db: {
-    type: 'mongo',
-    url: 'mongodb://localhost:27017/paraffin',
-    collectionName: 'authBroker',
-    methodology: 'horizontal',
-    option: {}
-  },
-  salt: {
-    salt: 'salt', //salt by pbkdf2 method
-    digest: 'sha512',
-    // size of the generated hash
-    hashBytes: 64,
-    // larger salt means hashed passwords are more resistant to rainbow table, but
-    // you get diminishing returns pretty fast
-    saltBytes: 16,
-    // more iterations means an attacker has to take longer to brute force an
-    // individual password, so larger is better. however, larger also means longer
-    // to hash the password. tune so that hashing the password takes about a
-    // second
-    iterations: 10
-  },
-  adapters: {
-    mqtt: {
-      limitW: 50,
-      limitMPM: 10
-    },
-    http: {},
-    coap: {}
-  }
-}
+let config = require("../test/config");
 
+const authorizer = new Authorizer(config.keycloak)
 
-var auth = new AuthBroker(envAuth)
+// hook it up
+aedes.authenticate = authorizer.authenticate();
+aedes.authorizeSubscribe = authorizer.authorizeSubscribe();
+aedes.authorizePublish = authorizer.authorizePublish();
 
-var ponteSettings = {
-  logger: {
-    level: 'info',
-    name: 'ParaffinIoT'
-  },
-  http: {
-    port: 3000,
-    authenticate: auth.authenticateHTTP(),
-    authorizeGet: auth.authorizeGetHTTP(),
-    authorizePut: auth.authorizePutHTTP()
-  },
-  mqtt: {
-    port: 1883, // tcp
-    authenticate: auth.authenticateMQTT(),
-    authorizePublish: auth.authorizePublishMQTT(),
-    authorizeSubscribe: auth.authorizeSubscribeMQTT()
-  },
-  coap: {
-    port: 2345, // udp
-    authenticate: auth.authenticateHTTP(),
-    authorizeGet: auth.authorizeGetHTTP(),
-    authorizePut: auth.authorizePutHTTP()
-  },
-  persistence: {
-    // same as http://mcollina.github.io/mosca/docs/lib/persistence/mongo.js.html
-    type: 'mongo',
-    url: 'mongodb://localhost:27017/ponte'
-  },
-  broker: {
-    // same as https://github.com/mcollina/ascoltatori#mongodb
-    type: 'mongo',
-    url: 'mongodb://localhost:27017/ponte'
-  }
-}
-
-var server = ponte(ponteSettings)
-
-server.on('clientConnected', function (client) {
-  console.log('Client connected', client.id)
+aedes.on('publish', async function (packet, client) {
+    console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
 })
 
-// fired when a message is received
-server.on('published', function (packet, client) {
-  console.log('Published', packet.payload)
+aedes.on('subscribe', function (subscriptions, client) {
+    console.log('MQTT client \x1b[32m' + (client ? client.id : client) +
+        '\x1b[0m subscribed to topics: ' + subscriptions.map(s => s.topic).join('\n'), 'from broker', aedes.id)
+        console.log(subscriptions[0])
 })
 
-server.on('updated', function (resource, buffer) {
-  console.log('Resource Updated', resource, buffer)
-})
-
-// fired when the server is ready
-server.on('ready', function() {
-  console.log('Broker is up and running')
-})
+server.listen(port, function () {
+    console.log("server listening on port", port);
+});

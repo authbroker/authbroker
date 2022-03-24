@@ -1,0 +1,37 @@
+{
+  "realm" : "IOT_Realm",
+  "users" : [ {
+    "username" : "admin",
+    "enabled" : true,
+    "credentials" : [ {
+      "type" : "password",
+      "value" : "admin"
+    } ],
+    "realmRoles" : [ "admin", "default-roles-iot_realm" ]
+  }, {
+    "username" : "inspector",
+    "enabled" : true,
+    "credentials" : [ {
+      "type" : "password",
+      "value" : "inspector"
+    } ],
+    "realmRoles" : [ "inspector", "default-roles-iot_realm" ]
+  }, {
+    "username" : "analyst",
+    "enabled" : true,
+    "credentials" : [ {
+      "type" : "password",
+      "value": "analyst"
+    } ],
+    "realmRoles" : [ "default-roles-iot_realm" ]
+  }, {
+    "username" : "device",
+    "enabled" : true,
+    "credentials" : [ {
+      "id" : "dddb2d0e-f6d5-4fb1-a021-195e200817d9",
+      "type" : "password",
+      "value": "device"
+    } ],
+    "realmRoles" : [ "device", "default-roles-iot_realm" ]
+  } ]
+}
