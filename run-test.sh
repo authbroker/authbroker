@@ -31,6 +31,6 @@ else
 fi
 
 echo 'Running Tests'
-npm run test
+#npm run test
 
-docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")
+#docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")
