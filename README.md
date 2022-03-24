@@ -20,14 +20,23 @@ cd authbroker
 npm install
 bash run-test.sh
 npm run test
+
+# for stopping docker instance you use this
+docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")
 ```
+
 It runs Keycloak by docker and import demo data to IOT_Realm realm. also you can run Keycloak by docker-compose.
 
 ``` bash
 sudo docker-comopse -f ./docker/docker-compose.yml up -d
 node ./example/broker.js
+
+# for Stopping docker-compose use this
+docker-comopse -f ./docker/docker-compose.yml down
 ```
+
 It runs and configs keycloak by demo clients and users and then run Broker example code
+
 
 
 ### How Using it
