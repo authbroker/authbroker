@@ -15,6 +15,7 @@ else
     #docker-compose -f $MY_PATH/docker/docker-compose.yml up -d
     docker build -t authbroker:test .
     docker run -d -p 8080:8080 authbroker:test 
+    npm install
     
     attempt_counter=0
     max_attempts=100
