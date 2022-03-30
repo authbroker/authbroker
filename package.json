@@ -1,6 +1,6 @@
 {
     "name": "@authbroker/authbroker",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "Authentication and Authorization module of HTTP/MQTT/CoAP Brokers based on NodeJS for IoT or Internet of Things.",
     "main": "./index.js",
     "scripts": {

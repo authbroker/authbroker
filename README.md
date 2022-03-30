@@ -19,6 +19,8 @@ git clone https://github.com/authbroker/authbroker
 cd authbroker
 npm install
 bash run-test.sh
+# visit http://localhost:8080
+# with username 'admin' and password 'admin'
 npm run test
 
 # for stopping docker instance you use this
@@ -44,6 +46,7 @@ if username/password or authorization permission in Keycloak changes, authBroker
 ## How Using it
 This module use Node-style callback and it can be used with different brokers like [Aedes](https://github.com/mcollina/aedes).
 
+
 ``` js
 const aedes = require("aedes")({
     persistence: new require("aedes-persistence")()
@@ -63,7 +66,10 @@ const config = {
           "secret": "secret"
         },
         "confidentialPort": 0,
-        "policyEnforcer": {}
+        "policyEnforcer": {},
+        "mqttpubScope": "scopes:mqttpub", // scope text for pub permission
+        "mqttsubScope": "scopes:mqttsub", // scope text for pub permission
+        "mqttResPerfix": "res:" // prefix text for resource or topic
       };
 
 const authbroker = new authBroker(config)
@@ -79,8 +85,7 @@ server.listen(port, function () {
 ```
 
 It's necessary to set these scopes in Authorization section in Keycloak.
-
-'scopes:mqttpub' is set for Publish permission and 'scopes:mqttsub' is set for Subscription permission.
+By defualt 'scopes:mqttpub' is set for Publish permission and 'scopes:mqttsub' is set for Subscription permission.
 
 ![Keycloak Scopes](./images/keycloak-scope.png)
 
@@ -93,7 +98,7 @@ run-test.sh script runs a preconfigured  Keycloak Demo version that can be used 
 ```bash
 bash run-test.sh
 ```
-then visit http://localhost:8080
+then visit http://localhost:8080 with username 'admin' and password 'admin' in Admin console.
 
 ## Contributing
 
@@ -117,4 +122,4 @@ And if you fancy it, join the [Telegram group](t.me/joinchat/AuKmG05CNFTz0bsBny9
 
 ## Copyright
 
-MIT - Copyright (c) 2019 ioKloud
+MIT - Copyright (c) 2019-2022 ioKloud
