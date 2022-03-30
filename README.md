@@ -25,21 +25,23 @@ npm run test
 docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")
 ```
 
-It runs Keycloak by docker and import demo data to IOT_Realm realm. also you can run Keycloak by docker-compose.
+It runs Keycloak by docker and import demo data to IOT_Realm realm. An example Broker runs that used auhtBroker by:
 
 ``` bash
-sudo docker-comopse -f ./docker/docker-compose.yml up -d
 node ./example/broker.js
+```
+these below commands Subscribe and Publish to broker.
 
-# for Stopping docker-compose use this
-docker-comopse -f ./docker/docker-compose.yml down
+```bash
+mosquitto_sub -h localhost -p 1883 -t garden/fan -u admin -P admin
+
+mosquitto_pub -h localhost -p 1883 -t garden/fan -m "hello world" -u admin -P admin
 ```
 
-It runs and configs keycloak by demo clients and users and then run Broker example code
+if username/password or authorization permission in Keycloak changes, authBroker authorization will not permitted to broker. for example change topic to unauthorized topic like garden/unathorized and see how broker reject it.
 
 
-
-### How Using it
+## How Using it
 This module use Node-style callback and it can be used with different brokers like [Aedes](https://github.com/mcollina/aedes).
 
 ``` js
@@ -76,6 +78,22 @@ server.listen(port, function () {
 });
 ```
 
+It's necessary to set these scopes in Authorization section in Keycloak.
+
+'scopes:mqttpub' is set for Publish permission and 'scopes:mqttsub' is set for Subscription permission.
+
+![Keycloak Scopes](./images/keycloak-scope.png)
+
+Users can Publish or Subscribe to resources which has a scope 'scopes:mqttpub' or 'scopes:mqttsub'.
+
+![Keycloak Resource](./images/keycloak-res.png)
+
+run-test.sh script runs a preconfigured  Keycloak Demo version that can be used as a template.
+
+```bash
+bash run-test.sh
+```
+then visit http://localhost:8080
 
 ## Contributing
 

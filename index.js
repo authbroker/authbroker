@@ -34,12 +34,13 @@ authBroker.prototype.authenticate = function () {
         that.keycloakAuthorizer.isAuthenticated(user, pass).then(
             (token) => {
                 const claims = jwt.decode(token);
-                //logger.debug(claims)
                 client.claims = claims
                 client.claimsToken = token
                 cb(null, true)
             },
             (err) => {
+                logger.debug('not authenticated')
+                logger.debug(err)
                 cb(err, false)
             }
         )
@@ -58,14 +59,14 @@ authBroker.prototype.authorizePublish = function () {
         that.keycloakAuthorizer.isAuthorised(client.claimsToken, that.config.mqttResPerfix + packet.topic).then(
             (token) => {
                 const claims = jwt.decode(token)
-                //logger.debug(claims)
                 client.claims = claims
                 client.claimsToken = token
                 if (client.claims.authorization && client.claims.authorization.permissions && that.checkPermissions(packet, client))
                     return cb(null)
             },
             (err) => {
-                logger.debug('not authorizzed')
+                logger.debug('not authorized')
+                logger.debug(err)
                 cb(err, false)
             }
         );
@@ -84,14 +85,14 @@ authBroker.prototype.authorizeSubscribe = function () {
             (token) => {
                 const claims = jwt.decode(token)
                 console.log(token)
-                //logger.debug(claims)
                 client.claims = claims
                 client.claimsToken = token
                 if (claims.authorization && claims.authorization.permissions && that.checkPermissions(subscription, client))
                     cb(null, subscription);
             },
             (err) => {
-                logger.debug('not authorizzed')
+                logger.debug('not authorized')
+                logger.debug(err)
                 cb(err)
             }
         )
@@ -102,12 +103,6 @@ authBroker.prototype.authorizeSubscribe = function () {
 authBroker.prototype.checkPermissions = function (packet, client) {
     let scope
     const permissions = client.claims.authorization.permissions
-    /*
-    if (isExpired(client.claims.exp)) {
-        logger.debug('token is expired')
-        return false
-    }
-    */
    
     if (packet.topic && !packet.cmd)
         scope = this.config.mqttsubScope //'scopes:mqttsub'
