@@ -14,25 +14,26 @@ else
     # Run Keycloak and Import demo data
     #docker-compose -f $MY_PATH/docker/docker-compose.yml up -d
     docker build -t authbroker:test .
-    docker run -d -p 8080:8080 authbroker:test 
+    docker run -d -p 8080:8080 authbroker:test
     #npm install
-
+    
     attempt_counter=0
     max_attempts=100
     until $(curl --output /dev/null --silent --head --fail http://localhost:8080/auth); do
         if [ ${attempt_counter} -eq ${max_attempts} ];then
             echo "Max attempts reached"
             exit 1
-        fi       
+        fi
         printf '.'
         attempt_counter=$(($attempt_counter+1))
         sleep 10
     done
+    echo ''
+    echo ''
+    echo 'Ready for running Tests...'
+    
 fi
 
-echo ''
-echo ''
-echo 'Ready for running Tests...'
 echo ''
 echo 'for Running Test use this command:'
 echo '$ npm run test'

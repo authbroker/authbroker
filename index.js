@@ -84,7 +84,6 @@ authBroker.prototype.authorizeSubscribe = function () {
         that.keycloakAuthorizer.isAuthorised(client.claimsToken, that.config.mqttResPerfix + subscription.topic).then(
             (token) => {
                 const claims = jwt.decode(token)
-                console.log(token)
                 client.claims = claims
                 client.claimsToken = token
                 if (claims.authorization && claims.authorization.permissions && that.checkPermissions(subscription, client))
@@ -120,10 +119,10 @@ authBroker.prototype.checkPermissions = function (packet, client) {
     return false
 }
 
-
+/*
 function isExpired(exp) {
     return ((exp * 1000) < Date.now());
 };
-
+*/
 
 module.exports = authBroker
