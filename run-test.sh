@@ -30,7 +30,12 @@ else
     done
 fi
 
-echo 'Running Tests'
-#npm run test
-
-#docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")
+echo ''
+echo ''
+echo 'Ready for running Tests...'
+echo ''
+echo 'for Running Test use this command:'
+echo '$ npm run test'
+echo ''
+echo 'for Stopping Keycloak server use this command:'
+echo '$ docker stop $(docker ps -a -q --filter ancestor=authbroker:test --format="{{.ID}}")'

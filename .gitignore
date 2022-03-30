@@ -38,6 +38,9 @@ node_modules
 # Editors
 .idea
 
+# dotenv
+.env
+
 # npm package lock
 package-lock.json
 yarn.lock
